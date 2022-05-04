@@ -15,11 +15,16 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         this.fireMaxCooldown = 50;
         this.fireCooldown = this.fireMaxCooldown;
+
+
+        // Facing for animations and dashing
+        this.facing = 'South';
     }
 
     update() {
         this.move();
         this.fire();
+        
         //console.log(this.x);
         //console.log(this.x);
     }
@@ -40,18 +45,23 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             horizontal += 10;
         }
         
-        //this.scene.physics.moveTo(this, horizontal, verticle, this.speed);
-        //console.log(this.x, verticle);
+      
         if(this.x + horizontal != this.x || this.y  + verticle != this.y){
             this.scene.physics.moveTo(this, horizontal + this.x, verticle + this.y, this.speed);
-            
+            this.updateFacing(horizontal, verticle);
+        }
+        // else you are not moving so set to standing animations
+        else{
+            standingAnimations();
         }
         verticle = 0;
         horizontal = 0;
     }
     fire(){
         // offsets will probably end up being a object that becomes fixed to the gun/ just is a gun object if we seperate
-        this.fireCooldown -= 1;
+        if(this.fireCooldown > 0){
+            this.fireCooldown -= 1;
+        }
         if(this.fireCooldown <= 0){
             
         
@@ -70,8 +80,78 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 this.fireCooldown = this.fireMaxCooldown;
             }
         }
+    }
+    updateFacing(horizontal, verticle){
+        var facing = '';
+        if(verticle > 0){
+            facing += 'South';
+        }
+        else if(verticle < 0){
+            facing += 'North';
+        }
+        if(horizontal > 0){
+            facing += 'East';
+        }
+        else if(horizontal < 0){
+            facing += 'West';
+        }
+        this.facing = facing;
+        // update animation based on this
         
-        
+        // These are all walking animations because this is called only while moving
+        // Same Animations for each direction but flipped to match direction
+        if(this.facing.includes('East')){
+            this.flipX = true;
+        }
+        else if(this.facing.includes('West')){
+            this.flipX = false
+        }
 
+        // < 6 to check if its only a single direction
+        if(this.facing.length < 6){
+            if(this.facing == 'North'){
+                // set to Up animation
+            }
+            else if(this.facing == 'South'){
+                // set to Down animation
+            }
+        }
+        else if(this.facing.length > 6){
+            if(this.facing.includes('North')){
+                // set to Angled Up animation
+            }
+            else if(this.facing.includes('South')){
+                // set to Angled Down animation
+            }
+        }
+    }
+    standingAnimations(){
+        
+        // These are all standing animations because this is called only while not moving
+        // Same Animations for each direction but flipped to match direction
+        if(this.facing.includes('East')){
+            this.flipX = true;
+        }
+        else if(this.facing.includes('West')){
+            this.flipX = false
+        }
+
+        // < 6 to check if its only a single direction
+        if(this.facing.length < 6){
+            if(this.facing == 'North'){
+                // set to Up animation
+            }
+            else if(this.facing == 'South'){
+                // set to Down animation
+            }
+        }
+        else if(this.facing.length > 6){
+            if(this.facing.includes('North')){
+                // set to Angled Up animation
+            }
+            else if(this.facing.includes('South')){
+                // set to Angled Down animation
+            }
+        }
     }
 }
