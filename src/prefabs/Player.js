@@ -8,7 +8,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         // physics settings
         this.setPushable(false);
         this.speed = 100;
-        
+        this.fireMaxCooldown = 50;
+        this.fireCooldown = this.fireMaxCooldown;
     }
 
     update() {
@@ -45,18 +46,25 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
     fire(){
         // offsets will probably end up being a object that becomes fixed to the gun/ just is a gun object if we seperate
-        var xOffset = 0;
-        var yOffset = 0;
-
-        let angle = Phaser.Math.Angle.Between(this.x, this.y, this.scene.input.mousePointer.x, this.scene.input.mousePointer.y);
-        angle = angle * (180/Math.PI);
+        this.fireCooldown -= 1;
+        if(this.fireCooldown <= 0){
+            this.fireCooldown = this.fireMaxCooldown;
         
-        if(keySPACE.isDown){
-            var bullet = new Bullet(this.scene, this.x + xOffset, this.y + yOffset, 'bullet');
-            bullet.angle = angle;
-            this.scene.bullets.add(bullet);
-            this.scene.physics.moveTo(bullet, this.scene.input.mousePointer.x, this.scene.input.mousePointer.y, bullet.speed);
+            var xOffset = 0;
+            var yOffset = 0;
+
+            let angle = Phaser.Math.Angle.Between(this.x, this.y, this.scene.input.mousePointer.x, this.scene.input.mousePointer.y);
+            angle = angle * (180/Math.PI);
+            
+            if(keySPACE.isDown){
+                var bullet = new Bullet(this.scene, this.x + xOffset, this.y + yOffset, 'bullet');
+                bullet.angle = angle;
+                this.scene.bullets.add(bullet);
+                this.scene.physics.moveTo(bullet, this.scene.input.mousePointer.x, this.scene.input.mousePointer.y, bullet.speed);
+            }
         }
+        
+        
 
     }
 }
