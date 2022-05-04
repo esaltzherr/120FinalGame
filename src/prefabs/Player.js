@@ -47,7 +47,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         // offsets will probably end up being a object that becomes fixed to the gun/ just is a gun object if we seperate
         var xOffset = 0;
         var yOffset = 0;
-        var bulletspeed = 100;
 
         let angle = Phaser.Math.Angle.Between(this.x, this.y, this.scene.input.mousePointer.x, this.scene.input.mousePointer.y);
         angle = angle * (180/Math.PI);
@@ -55,7 +54,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         if(keySPACE.isDown){
             var bullet = new Bullet(this.scene, this.x + xOffset, this.y + yOffset, 'bullet');
             bullet.angle = angle;
-            this.scene.physics.moveTo(bullet, this.scene.input.mousePointer.x, this.scene.input.mousePointer.y, bulletspeed);
+            this.scene.bullets.add(bullet);
+            this.scene.physics.moveTo(bullet, this.scene.input.mousePointer.x, this.scene.input.mousePointer.y, bullet.speed);
         }
 
     }
