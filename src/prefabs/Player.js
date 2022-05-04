@@ -8,6 +8,11 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         // physics settings
         this.setPushable(false);
         this.speed = 100;
+        this.body.collideWorldBounds = true;
+
+        this.setSize(this.width/2,this.height/2);
+        this.setOffset(this.width/5,this.height/2);
+
         this.fireMaxCooldown = 50;
         this.fireCooldown = this.fireMaxCooldown;
     }
@@ -55,7 +60,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
             
             
-            if(keySPACE.isDown){
+            if(this.scene.input.mousePointer.isDown){
                 let angle = Phaser.Math.Angle.Between(this.x, this.y, this.scene.input.mousePointer.x, this.scene.input.mousePointer.y);
                 angle = angle * (180/Math.PI);
                 var bullet = new Bullet(this.scene, this.x + xOffset, this.y + yOffset, 'bullet');
