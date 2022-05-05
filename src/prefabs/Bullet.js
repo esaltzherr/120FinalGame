@@ -7,6 +7,7 @@ class Bullet extends Phaser.Physics.Arcade.Sprite {
 
         // physics settings
         this.setPushable(false);
+        this.outOfBoundsKill = true;
         this.speed = 1000;
     }
 
