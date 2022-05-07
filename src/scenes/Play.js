@@ -15,19 +15,29 @@ class Play extends Phaser.Scene {
         keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        this.input.keyboard.addCapture(Phaser.Input.Keyboard.KeyCodes.SHIFT); 
+        keySHIFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
+        
     }
     create() {
+        
+        this.input.mouse.disableContextMenu();
+
+
         this.monsters = this.physics.add.group();
         this.monsters.runChildUpdate = true;
         this.bullets = this.physics.add.group();
 
-        this.player = new Player(this, 450, 250, 'dudeDown');
+        var r1 = this.add.rectangle(200, 200, 148, 148, 0x6666ff);
 
+        this.player = new Player(this, 0, 0, 'dudeDown');
+        
+        this.cameras.main.startFollow(this.player);
 
         var monster = []
 
-       // monster.push(new BasicMonster(this, 100, 100, 'monster'));
-        //monster.push(new BasicMonster(this, 500, 500, 'monster'));
+        monster.push(new BasicMonster(this, 100, 100, 'monster'));
+        monster.push(new BasicMonster(this, 500, 500, 'monster'));
         this.monsters.addMultiple(monster);
 
 
