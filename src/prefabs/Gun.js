@@ -12,6 +12,7 @@ class Gun extends Phaser.Physics.Arcade.Sprite {
         this.fireMaxCooldown = 50;
         this.fireCooldown = this.fireMaxCooldown;
         this.depth = 2;
+        this.angle = 0;
     }
 
     update() {
@@ -21,10 +22,13 @@ class Gun extends Phaser.Physics.Arcade.Sprite {
     
     direction(){
         var facing = '';
-        let angle = Phaser.Math.Angle.Between(this.x, this.y, this.scene.input.mousePointer.x, this.scene.input.mousePointer.y);
+
+
+        
+        // spawn player at 0,0 so the mouse can be tracked from an offset of 0,0 because that doesnt track canvas
+        let angle = Phaser.Math.Angle.Between(this.x, this.y, this.scene.input.activePointer.worldX, this.scene.input.activePointer.worldY);
         angle = angle * (180/Math.PI);
         this.angle = angle;
-        //console.log(this.angle);
 
         if(this.angle >= 0){
             facing += 'South'
@@ -50,20 +54,16 @@ class Gun extends Phaser.Physics.Arcade.Sprite {
         if(this.fireCooldown > 0){
             this.fireCooldown -= 1;
         }
-        if(this.fireCooldown <= 0){
+        if(this.fireCooldown <= 0 && !this.player.tempDisableMove && this.player.canShoot){
             
         
-            if(this.scene.input.mousePointer.isDown){
+            if(this.scene.input.activePointer.leftButtonDown()){
                 var bullet = new Bullet(this.scene, this.x, this.y, 'bullet');
-                bullet.angle = this.scene.player.gun.angle;
+                bullet.angle = this.angle;
                 this.scene.bullets.add(bullet);
-                this.scene.physics.moveTo(bullet, this.scene.input.mousePointer.x, this.scene.input.mousePointer.y, bullet.speed);
+                this.scene.physics.moveTo(bullet, this.scene.input.mousePointer.worldX, this.scene.input.mousePointer.worldY, bullet.speed);
                 this.fireCooldown = this.fireMaxCooldown;
             }
         }
-    }
-    move(){
-        this.x = this.player.x;
-        this.y = this.player.y;
     }
 }
