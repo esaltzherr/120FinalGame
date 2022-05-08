@@ -54,7 +54,7 @@ class Gun extends Phaser.Physics.Arcade.Sprite {
         if(this.fireCooldown > 0){
             this.fireCooldown -= 1;
         }
-        if(this.fireCooldown <= 0){
+        if(this.fireCooldown <= 0 && !this.player.tempDisableMove && this.player.canShoot){
             
         
             if(this.scene.input.activePointer.leftButtonDown()){

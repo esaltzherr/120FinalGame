@@ -44,6 +44,7 @@ class Play extends Phaser.Scene {
 
         this.physics.add.collider(this.monsters, this.monsters);
         this.physics.add.collider(this.monsters, this.bullets, this.destroy);
+        this.physics.add.collider(this.player.knife, this.monsters, this.killMonster);
 
     }
 
@@ -53,5 +54,8 @@ class Play extends Phaser.Scene {
     destroy(monster, bullet){
         monster.destroy();
         bullet.destroy();
+    }
+    killMonster(anything, monster){
+        monster.destroy();
     }
 }
