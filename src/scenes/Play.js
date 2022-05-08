@@ -23,6 +23,7 @@ class Play extends Phaser.Scene {
         
         this.input.mouse.disableContextMenu();
 
+        this.add.text(0,0,"Controls: \nWASD\nSpace - Dash\nShift - Heal\nRightMouseButton - Sword\nLeftMouseButton - Shoot",  { font: '"Press Start 2P"' });
 
         this.monsters = this.physics.add.group();
         this.monsters.runChildUpdate = true;
@@ -43,6 +44,7 @@ class Play extends Phaser.Scene {
 
 
         this.physics.add.collider(this.monsters, this.monsters);
+        this.physics.add.collider(this.player, this.monsters, this.gotHit);
         this.physics.add.collider(this.monsters, this.bullets, this.destroy);
         this.physics.add.collider(this.player.knife, this.monsters, this.killMonster);
 
@@ -57,5 +59,11 @@ class Play extends Phaser.Scene {
     }
     killMonster(anything, monster){
         monster.destroy();
+    }
+    gotHit(player, monster){
+       
+        //player.health -= monster.damage;
+        player.knockback(monster);
+
     }
 }

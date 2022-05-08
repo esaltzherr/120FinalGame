@@ -18,6 +18,12 @@ class Gun extends Phaser.Physics.Arcade.Sprite {
     update() {
        this.direction();
        this.fire();
+       if(this.x != this.player.x){
+           this.x = this.player.x;
+       }
+       if(this.y != this.player.y){
+        this.y = this.player.y;
+    }
     }
     
     direction(){

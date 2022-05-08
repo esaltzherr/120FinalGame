@@ -26,7 +26,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
 
 
-
+        this.knockedBack = false;
+        this.knockBackMaxTime = 50;
+        this.knockBackTime = this.knockBackMaxTime;
+        this.knockBackSpeed = 300;
         //ability bools
         this.canWalk = true;
         this.moveSpeed = 100;
@@ -64,7 +67,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.knife.update();
         this.facing = this.gun.facing;
         this.abilities();
-        if (this.dashing || this.healing || this.stabbing) {
+        this.timers();
+        if (this.dashing || this.healing || this.stabbing || this.knockedBack) {
             this.tempDisableMove = true;
         }
         else {
@@ -75,7 +79,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         //console.log(this.x);
     }
     move() {
-        if (!this.dashing) {
+        if (!this.dashing && ! this.knockedBack) {
             this.setVelocity(0, 0);
             this.gun.setVelocity(0, 0);
         }
@@ -180,8 +184,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             }
         }
 
+        //// this gonna change when an animation is added. the else will be replaced with animation finishing.
         if (this.canStab) {
-            if (this.scene.input.activePointer.rightButtonDown()) {
+            if (this.scene.input.activePointer.rightButtonDown() && !this.dashing && !this.healing) {
                 this.stabbing = true;
                 this.knife.body.enable = true;
 
@@ -195,7 +200,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 this.knife.body.enable = false;
             }
         }
-        this.timers();
+        
     }
     timers() {
         this.dashCoolDown -= 1;
@@ -205,7 +210,18 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         if (this.dashTimer < 0) {
             this.dashing = false;
             this.dashTimer = this.maxDashTimer;
-
+        }
+        if(this.knockedBack){
+            this.knockBackTime -= 1;
+            if(this.knockBackTime%10 == 0){
+                this.setTan
+                this.flicker();
+            }
+        }
+        if(this.knockBackTime < 0){
+            this.alpha = 1;
+            this.knockedBack = false;
+            this.knockBackTime = this.knockBackMaxTime;
         }
 
 
@@ -214,5 +230,22 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     moveEntity(horizontal, verticle, speed) {
         this.scene.physics.moveTo(this, horizontal + this.x, verticle + this.y, speed);
         this.scene.physics.moveTo(this.gun, horizontal + this.x, verticle + this.y, speed);
+    }
+    knockback(monster){
+        this.knockedBack = true;
+        let angle = Phaser.Math.Angle.Between(this.x, this.y, monster.x, monster.y);
+        let horizontal =  Math.cos(angle);
+        let verticle = Math.sin(angle);
+
+        
+        this.moveEntity(-horizontal,  -verticle, this.knockBackSpeed);
+    }
+    flicker(){
+        if(this.alpha == 0.5){
+            this.alpha = 1;
+        }
+        else if (this.alpha == 1){
+            this.alpha = 0.5
+        }
     }
 }
