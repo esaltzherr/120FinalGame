@@ -17,18 +17,22 @@ class Play extends Phaser.Scene {
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.input.keyboard.addCapture(Phaser.Input.Keyboard.KeyCodes.SHIFT); 
         keySHIFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
-        
     }
     create() {
-        this.physics.world.setBounds(0, 0, this.game.config.width, this.game.config.height);
+        // world bounds
+        this.boundWidth = this.game.config.width * 2.5;
+        this.boundHeight = this.game.config.height * 2.5;
+        this.physics.world.setBounds(0, 0, this.boundWidth, this.boundHeight);
         this.physics.world.setBoundsCollision(true, true, true, true);
 
-        var r3 = this.add.rectangle(0, 0, this.game.config.width, this.game.config.height).setOrigin(0, 0);
+        // show world bounds
+        var r3 = this.add.rectangle(0, 0, this.boundWidth, this.boundHeight).setOrigin(0, 0);
         r3.setStrokeStyle(3, 0x1a65ac);
 
         this.input.mouse.disableContextMenu();
         this.add.text(0,0,"Controls: \nWASD\nSpace - Dash\nShift - Heal\nRightMouseButton - Sword\nLeftMouseButton - Shoot",  { font: '"Press Start 2P"' });
 
+        // spawn monsters in first round
         this.numMonsters = 10;
         this.monsters = this.physics.add.group();
         this.monsters.runChildUpdate = true;
@@ -39,14 +43,19 @@ class Play extends Phaser.Scene {
 
         var r1 = this.add.rectangle(200, 200, 148, 148, 0x6666ff);
 
-        this.player = new Player(this, 0, 0, 'dudeDown');
+        this.player = new Player(this, 200, 200, 'dudeDown');
         this.player.body.setCollideWorldBounds(true);
         this.cameras.main.startFollow(this.player);
 
+        // DO WE NEED THIS ANYMORE???
         //var monster = []
         //monster.push(new BasicMonster(this, 100, 100, 'monster'));
         //monster.push(new BasicMonster(this, 500, 500, 'monster'));
         //this.monsters.addMultiple(monster);
+
+        // minimap
+        this.minimap = this.cameras.add(10, 10, 175, 100).setZoom(0.15).setName('mini');
+        this.minimap.setBackgroundColor(0x002244);
 
         this.physics.add.collider(this.monsters, this.monsters);
         this.physics.add.collider(this.player, this.monsters, this.gotHit);
@@ -56,6 +65,8 @@ class Play extends Phaser.Scene {
 
     update() {
         this.player.update();
+        this.minimap.scrollX = this.player.x;
+        this.minimap.scrollY = this.player.y;
 
         // at end of round, spawn 5 more monsters than last round
         if(this.monsters.getLength() == 0 && !this.spawning) {
