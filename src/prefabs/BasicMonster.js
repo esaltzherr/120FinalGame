@@ -8,6 +8,7 @@ class BasicMonster extends Phaser.Physics.Arcade.Sprite {
         // physics settings
         this.setPushable(false);
         this.speed = 50;
+        //console.log('spawned');
     }
 
     update() {
