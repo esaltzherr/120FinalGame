@@ -17,12 +17,13 @@ class Play extends Phaser.Scene {
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.input.keyboard.addCapture(Phaser.Input.Keyboard.KeyCodes.SHIFT); 
         keySHIFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
+        keyO = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.O);
         
     }
     create() {
         
         this.input.mouse.disableContextMenu();
-
+        this.input.setPollAlways();
         this.add.text(0,0,"Controls: \nWASD\nSpace - Dash\nShift - Heal\nRightMouseButton - Sword\nLeftMouseButton - Shoot",  { font: '"Press Start 2P"' });
 
         this.monsters = this.physics.add.group();
@@ -42,7 +43,6 @@ class Play extends Phaser.Scene {
         this.monsters.addMultiple(monster);
 
 
-
         this.physics.add.collider(this.monsters, this.monsters);
         this.physics.add.collider(this.player, this.monsters, this.gotHit);
         this.physics.add.collider(this.monsters, this.bullets, this.destroy);
@@ -51,7 +51,8 @@ class Play extends Phaser.Scene {
     }
 
     update() {
-       this.player.update();
+        this.disableScreen();
+        this.player.update();
     }
     destroy(monster, bullet){
         monster.destroy();
@@ -61,9 +62,14 @@ class Play extends Phaser.Scene {
         monster.destroy();
     }
     gotHit(player, monster){
-       
         //player.health -= monster.damage;
         player.knockback(monster);
 
+    }
+    disableScreen(){
+        if(Phaser.Input.Keyboard.JustDown(keyO)){     
+            this.scene.start('selectscene');
+            this.scene.pause();
+        } 
     }
 }

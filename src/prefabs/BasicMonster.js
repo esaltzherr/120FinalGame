@@ -5,6 +5,7 @@ class BasicMonster extends Phaser.Physics.Arcade.Sprite {
         scene.add.existing(this);
         this.scene = scene;
 
+        this.damage = 1;
         // physics settings
         this.setPushable(false);
         this.speed = 50;

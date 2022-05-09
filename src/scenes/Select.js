@@ -1,12 +1,13 @@
 class Select extends Phaser.Scene {
     constructor() {
-        super('selectscened');
+        super('selectscene');
     }
 
     create() {
-        keyENTER = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
-        keyENTER.on("down", (key, event) => { 
-            this.scene.start('playscene')
+        keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
+        keyP.on("down", (key, event) => { 
+            this.scene.resume('playscene');
+            this.scene.stop();
         });
     }
 }
