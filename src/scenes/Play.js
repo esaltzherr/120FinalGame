@@ -10,6 +10,8 @@ class Play extends Phaser.Scene {
         this.load.image('monster', './assets/monster.png');
         this.load.image('gun', './assets/gun.png');
 
+        this.load.image('player_gun', './assets/player_gun.png');
+
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
@@ -54,7 +56,7 @@ class Play extends Phaser.Scene {
         //this.monsters.addMultiple(monster);
 
         // minimap
-        this.minimap = this.cameras.add(10, 10, 175, 100).setZoom(0.15).setName('mini');
+        this.minimap = this.cameras.add(10, 10, 175, 100).setZoom(0.1).setName('mini');
         this.minimap.setBackgroundColor(0x002244);
 
         this.physics.add.collider(this.monsters, this.monsters);
@@ -78,7 +80,7 @@ class Play extends Phaser.Scene {
     destroy(monster, bullet){
         monster.destroy();
         bullet.destroy();
-        console.log('dead');
+        //console.log('dead');
     }
     killMonster(anything, monster){
         monster.destroy();
@@ -96,12 +98,34 @@ class Play extends Phaser.Scene {
             delay: 1000,
             repeat: num - 1,
             callback: () => {
-                // randomly spawn monser between 200-300 pixels away
-                // LATER, WILL NEED TO CHANGE SO THEY DON'T SPAWN OUTSIDE WORLD
-                let randX = this.player.x + (Phaser.Math.Between(200, 300) * this.chooseSign());
-                let randY = this.player.y + (Phaser.Math.Between(200, 300) * this.chooseSign());                
+                let randX = this.player.x;
+                let randY = this.player.y;
+
+                // choose x depending on how close player is to edge
+                if(this.player.x < 300) {
+                    randX += Phaser.Math.Between(200, 300);
+                }
+                else if(this.player.x > this.boundWidth - 300) {
+                    randX -= Phaser.Math.Between(200, 300);
+                }
+                else {
+                    randX += Phaser.Math.Between(200, 300) * this.chooseSign();
+                }
+
+                // choose y depending on how close player is to edge
+                if(this.player.y < 300) {
+                    randY += Phaser.Math.Between(200, 300);
+                }
+                else if(this.player.y > this.boundHeight - 300) {
+                    randY -= Phaser.Math.Between(200, 300);
+                }
+                else {
+                    randY += Phaser.Math.Between(200, 300) * this.chooseSign();
+                }
+
+                // spawn monster
                 this.monsters.add(new BasicMonster(this, randX, randY, 'monster'));
-                //console.log(randX + ', ' + randY)
+                //console.log(randX + ', ' + randY);
                 
                 // check if done spawning
                 if(spawnTimer.getRepeatCount() == num - 1) {
