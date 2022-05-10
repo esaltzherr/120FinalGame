@@ -16,7 +16,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.fireMaxCooldown = 50;
         this.fireCooldown = this.fireMaxCooldown;
 
-        this.gun = new Gun(this.scene, this.x, this.y, 'gun', this);
+        this.gun = new Gun(this.scene, this.x, this.y, 'player_gun', this);
         this.knife = new Knife(this.scene, this.x, this.y, 'NOTHING', this);
 
         // Facing for animations and dashing
