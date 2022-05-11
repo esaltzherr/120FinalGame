@@ -64,6 +64,8 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.monsters, this.bullets, this.hurtMonster);
         this.physics.add.collider(this.player.knife, this.monsters, (knife, monster) => { monster.destroy(); });
         
+        this.physics.add.collider(this.monsters, this.bullets, this.destroy);
+        this.physics.add.collider(this.player.knife, this.monsters, this.killMonster);
     }
 
     update() {
@@ -96,7 +98,8 @@ class Play extends Phaser.Scene {
     }
 
     disableScreen(){
-        if(Phaser.Input.Keyboard.JustDown(keyO)){     
+        if(Phaser.Input.Keyboard.JustDown(keyO)){    
+            console.log(this); 
             this.scene.launch('selectscene');
             this.scene.pause();
         } 

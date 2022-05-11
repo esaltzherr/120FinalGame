@@ -9,5 +9,9 @@ class Select extends Phaser.Scene {
             this.scene.resume('playscene');
             this.scene.stop();
         });
+        var r1 = this.add.rectangle(300, 150, 148, 296, 0x6666ff).setOrigin(0,0);
+        var r2 = this.add.rectangle(600, 150, 148, 296, 0x6666ff).setOrigin(0,0);
+
+
     }
 }
