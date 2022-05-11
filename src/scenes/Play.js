@@ -96,7 +96,8 @@ class Play extends Phaser.Scene {
     }
 
     disableScreen(){
-        if(Phaser.Input.Keyboard.JustDown(keyO)){     
+        if(Phaser.Input.Keyboard.JustDown(keyO)){    
+            console.log(this); 
             this.scene.launch('selectscene');
             this.scene.pause();
         } 
