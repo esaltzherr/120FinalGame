@@ -19,7 +19,11 @@ class Play extends Phaser.Scene {
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.input.keyboard.addCapture(Phaser.Input.Keyboard.KeyCodes.SHIFT); 
         keySHIFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
+
+        keyO = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.O);
+        
     }
+
     create() {
         // world bounds
         this.boundWidth = this.game.config.width * 2.5;
@@ -32,6 +36,7 @@ class Play extends Phaser.Scene {
         r3.setStrokeStyle(3, 0x1a65ac);
 
         this.input.mouse.disableContextMenu();
+        this.input.setPollAlways();
         this.add.text(0,0,"Controls: \nWASD\nSpace - Dash\nShift - Heal\nRightMouseButton - Sword\nLeftMouseButton - Shoot",  { font: '"Press Start 2P"' });
 
         // spawn monsters in first round
@@ -66,6 +71,10 @@ class Play extends Phaser.Scene {
     }
 
     update() {
+
+        this.disableScreen();
+        
+
         this.player.update();
         this.minimap.scrollX = this.player.x;
         this.minimap.scrollY = this.player.y;
@@ -86,11 +95,19 @@ class Play extends Phaser.Scene {
         monster.destroy();
     }
     gotHit(player, monster){
-       
         //player.health -= monster.damage;
         player.knockback(monster);
 
     }
+
+    disableScreen(){
+        if(Phaser.Input.Keyboard.JustDown(keyO)){     
+            this.scene.launch('selectscene');
+            this.scene.pause();
+        } 
+    }
+
+
 
     spawnMonsters(num) {
         // spawn num times every second
