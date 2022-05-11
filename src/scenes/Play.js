@@ -64,6 +64,8 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.monsters, this.bullets, this.hurtMonster);
         this.physics.add.collider(this.player.knife, this.monsters, (knife, monster) => { monster.destroy(); });
         
+        this.physics.add.collider(this.monsters, this.bullets, this.destroy);
+        this.physics.add.collider(this.player.knife, this.monsters, this.killMonster);
     }
 
     update() {
@@ -140,7 +142,7 @@ class Play extends Phaser.Scene {
 
                 } while(randX == monsterX && randY == monsterY);
                 
-                // spawn monster
+                // spawn monsteraf
                 this.monsters.add(new BasicMonster(this, randX, randY, 'slime_enemy').setOrigin(0.5, 0.5));
                 //console.log(randX + ', ' + randY);
                 
