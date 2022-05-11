@@ -69,10 +69,8 @@ class Play extends Phaser.Scene {
     }
 
     update() {
-
         this.disableScreen();
         
-
         this.player.update();
         this.minimap.scrollX = this.player.x;
         this.minimap.scrollY = this.player.y;
@@ -111,40 +109,20 @@ class Play extends Phaser.Scene {
             delay: 1000,
             repeat: num - 1,
             callback: () => {
-                let randX = this.player.x;
-                let randY = this.player.y;
-
-                // create coordinates until monsters aren't spawning on each other
+                // find random point between 200 and 500 pixels way from player
                 do {
-                    // choose x depending on how close player is to edge
-                    if(this.player.x < 300) {
-                        randX += Phaser.Math.Between(200, 300);
-                    }
-                    else if(this.player.x > this.boundWidth - 300) {
-                        randX -= Phaser.Math.Between(200, 300);
-                    }
-                    else {
-                        randX += Phaser.Math.Between(200, 300) * this.chooseSign();
-                    }
+                    var randX = this.player.x + Math.cos(Phaser.Math.Between(0, 2 * Math.PI)) * Phaser.Math.Between(200, 500);
+                    var randY = this.player.y + Math.sin(Phaser.Math.Between(0, 2 * Math.PI)) * Phaser.Math.Between(200, 500);
 
-                    // choose y depending on how close player is to edge
-                    if(this.player.y < 300) {
-                        randY += Phaser.Math.Between(200, 300);
-                    }
-                    else if(this.player.y > this.boundHeight - 300) {
-                        randY -= Phaser.Math.Between(200, 300);
-                    }
-                    else {
-                        randY += Phaser.Math.Between(200, 300) * this.chooseSign();
-                    }
-                    var monsterX = this.monsters.getChildren().filter(enemy => enemy.x == randX);
-                    var monsterY = this.monsters.getChildren().filter(enemy => enemy.y == randX);
+                    // see if monster is outside of bounds, inside player radius, or overlapping with another monster
+                    var outsideBounds = randX < 72 || randX > this.boundWidth - 72 || randY < 72 || randY > this.boundHeight - 72;
+                    var insidePlayerRad = Phaser.Math.Distance.Between(this.player.x, this.player.y, randX, randY) < 200;
+                    var overlapping = this.monsters.getChildren().filter(enemy => randX >= enemy.x - 72 && randX <= enemy.x  + 72 &&
+                                                                                  randY >= enemy.y - 72 && randY <= enemy.y + 72);
+                } while(outsideBounds || insidePlayerRad || overlapping.length > 0);
 
-                } while(randX == monsterX && randY == monsterY);
-                
-                // spawn monsteraf
+                // spawn monster
                 this.monsters.add(new BasicMonster(this, randX, randY, 'slime_enemy').setOrigin(0.5, 0.5));
-                //console.log(randX + ', ' + randY);
                 
                 // check if done spawning
                 if(spawnTimer.getRepeatCount() == num - 1) {
@@ -160,4 +138,3 @@ class Play extends Phaser.Scene {
         else { return -1; }
     }
 }
-
