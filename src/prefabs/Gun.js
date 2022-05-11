@@ -8,7 +8,6 @@ class Gun extends Phaser.Physics.Arcade.Sprite {
         // physics settings
         this.setPushable(false);
 
-
         this.fireMaxCooldown = 50;
         this.fireCooldown = this.fireMaxCooldown;
         this.depth = 2;

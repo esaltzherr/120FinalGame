@@ -5,12 +5,14 @@ class BasicMonster extends Phaser.Physics.Arcade.Sprite {
         scene.add.existing(this);
         this.scene = scene;
 
-        this.damage = 1;
+        this.damage = 20;
         // physics settings
         this.setPushable(false);
         this.speed = 50;
-        // HEALTH IS 3, GUN DAMAGE IS 1
+        this.health = 100;
         //console.log('spawned');
+        this.setSize(75, 67)
+        this.setOffset(10, 27)
     }
 
     update() {
@@ -18,5 +20,4 @@ class BasicMonster extends Phaser.Physics.Arcade.Sprite {
         if(this.scene.player.x < this.x) { this.flipX = true; }
         else { this.flixX = false; }
     }
-    
 }

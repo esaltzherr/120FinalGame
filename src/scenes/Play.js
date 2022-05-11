@@ -11,6 +11,7 @@ class Play extends Phaser.Scene {
         this.load.image('gun', './assets/gun.png');
 
         this.load.image('player_gun', './assets/player_gun.png');
+        this.load.spritesheet('slime_enemy', './assets/slime_enemy.png', { frameWidth: 96, frameHeight: 96});
 
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -43,7 +44,7 @@ class Play extends Phaser.Scene {
         this.numMonsters = 10;
         this.monsters = this.physics.add.group();
         this.monsters.runChildUpdate = true;
-        //this.spawnMonsters(this.numMonsters);
+        this.spawnMonsters(this.numMonsters);
         this.spawning = true;
 
         this.bullets = this.physics.add.group();
@@ -60,9 +61,8 @@ class Play extends Phaser.Scene {
 
         this.physics.add.collider(this.monsters, this.monsters);
         this.physics.add.collider(this.player, this.monsters, this.gotHit);
-        this.physics.add.collider(this.monsters, this.bullets, this.destroy);
-        this.physics.add.collider(this.player.knife, this.monsters, this.killMonster);
-
+        this.physics.add.collider(this.monsters, this.bullets, this.hurtMonster);
+        this.physics.add.collider(this.player.knife, this.monsters, (knife, monster) => { monster.destroy(); });
         
     }
 
@@ -82,14 +82,13 @@ class Play extends Phaser.Scene {
             this.spawnMonsters(this.numMonsters);
         }
     }
-    destroy(monster, bullet){
-        monster.destroy();
+
+    hurtMonster(monster, bullet) {
+        monster.health -= bullet.damage;
         bullet.destroy();
-        //console.log('dead');
+        if(monster.health <= 0) { monster.destroy(); }
     }
-    killMonster(anything, monster){
-        monster.destroy();
-    }
+
     gotHit(player, monster){
         //player.health -= monster.damage;
         player.knockback(monster);
@@ -103,8 +102,6 @@ class Play extends Phaser.Scene {
         } 
     }
 
-
-
     spawnMonsters(num) {
         // spawn num times every second
         let spawnTimer = this.time.addEvent({
@@ -114,32 +111,36 @@ class Play extends Phaser.Scene {
                 let randX = this.player.x;
                 let randY = this.player.y;
 
-                // choose x depending on how close player is to edge
-                if(this.player.x < 300) {
-                    randX += Phaser.Math.Between(200, 300);
-                }
-                else if(this.player.x > this.boundWidth - 300) {
-                    randX -= Phaser.Math.Between(200, 300);
-                }
-                else {
-                    randX += Phaser.Math.Between(200, 300) * this.chooseSign();
-                }
+                // create coordinates until monsters aren't spawning on each other
+                do {
+                    // choose x depending on how close player is to edge
+                    if(this.player.x < 300) {
+                        randX += Phaser.Math.Between(200, 300);
+                    }
+                    else if(this.player.x > this.boundWidth - 300) {
+                        randX -= Phaser.Math.Between(200, 300);
+                    }
+                    else {
+                        randX += Phaser.Math.Between(200, 300) * this.chooseSign();
+                    }
 
-                // choose y depending on how close player is to edge
-                if(this.player.y < 300) {
-                    randY += Phaser.Math.Between(200, 300);
-                }
-                else if(this.player.y > this.boundHeight - 300) {
-                    randY -= Phaser.Math.Between(200, 300);
-                }
-                else {
-                    randY += Phaser.Math.Between(200, 300) * this.chooseSign();
-                }
+                    // choose y depending on how close player is to edge
+                    if(this.player.y < 300) {
+                        randY += Phaser.Math.Between(200, 300);
+                    }
+                    else if(this.player.y > this.boundHeight - 300) {
+                        randY -= Phaser.Math.Between(200, 300);
+                    }
+                    else {
+                        randY += Phaser.Math.Between(200, 300) * this.chooseSign();
+                    }
+                    var monsterX = this.monsters.getChildren().filter(enemy => enemy.x == randX);
+                    var monsterY = this.monsters.getChildren().filter(enemy => enemy.y == randX);
 
-                // check if monster already in position
-
+                } while(randX == monsterX && randY == monsterY);
+                
                 // spawn monster
-                this.monsters.add(new BasicMonster(this, randX, randY, 'monster'));
+                this.monsters.add(new BasicMonster(this, randX, randY, 'slime_enemy').setOrigin(0.5, 0.5));
                 //console.log(randX + ', ' + randY);
                 
                 // check if done spawning
@@ -156,3 +157,4 @@ class Play extends Phaser.Scene {
         else { return -1; }
     }
 }
+
