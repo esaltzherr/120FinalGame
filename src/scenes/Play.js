@@ -38,7 +38,7 @@ class Play extends Phaser.Scene {
         this.numMonsters = 10;
         this.monsters = this.physics.add.group();
         this.monsters.runChildUpdate = true;
-        this.spawnMonsters(this.numMonsters);
+        //this.spawnMonsters(this.numMonsters);
         this.spawning = true;
 
         this.bullets = this.physics.add.group();
@@ -49,12 +49,6 @@ class Play extends Phaser.Scene {
         this.player.body.setCollideWorldBounds(true);
         this.cameras.main.startFollow(this.player);
 
-        // DO WE NEED THIS ANYMORE???
-        //var monster = []
-        //monster.push(new BasicMonster(this, 100, 100, 'monster'));
-        //monster.push(new BasicMonster(this, 500, 500, 'monster'));
-        //this.monsters.addMultiple(monster);
-
         // minimap
         this.minimap = this.cameras.add(10, 10, 175, 100).setZoom(0.1).setName('mini');
         this.minimap.setBackgroundColor(0x002244);
@@ -63,6 +57,8 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.player, this.monsters, this.gotHit);
         this.physics.add.collider(this.monsters, this.bullets, this.destroy);
         this.physics.add.collider(this.player.knife, this.monsters, this.killMonster);
+
+        
     }
 
     update() {
@@ -122,6 +118,8 @@ class Play extends Phaser.Scene {
                 else {
                     randY += Phaser.Math.Between(200, 300) * this.chooseSign();
                 }
+
+                // check if monster already in position
 
                 // spawn monster
                 this.monsters.add(new BasicMonster(this, randX, randY, 'monster'));
