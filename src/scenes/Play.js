@@ -53,6 +53,7 @@ class Play extends Phaser.Scene {
     update() {
         this.disableScreen();
         this.player.update();
+        
     }
     destroy(monster, bullet){
         monster.destroy();
@@ -68,7 +69,7 @@ class Play extends Phaser.Scene {
     }
     disableScreen(){
         if(Phaser.Input.Keyboard.JustDown(keyO)){     
-            this.scene.start('selectscene');
+            this.scene.launch('selectscene');
             this.scene.pause();
         } 
     }
