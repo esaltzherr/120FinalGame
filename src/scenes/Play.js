@@ -41,10 +41,11 @@ class Play extends Phaser.Scene {
         this.add.text(0,0,"Controls: \nWASD\nSpace - Dash\nShift - Heal\nRightMouseButton - Sword\nLeftMouseButton - Shoot",  { font: '"Press Start 2P"' });
 
         // spawn monsters in first round
+        this.monsterTypes = [BasicMonster, BruteMonster];
         this.numMonsters = 10;
         this.monsters = this.physics.add.group();
         this.monsters.runChildUpdate = true;
-        this.spawnMonsters(this.numMonsters);
+        this.spawnMonsters(this.numMonsters, [BasicMonster]);
         this.spawning = true;
 
         this.bullets = this.physics.add.group();
@@ -79,11 +80,14 @@ class Play extends Phaser.Scene {
         if(this.monsters.getLength() == 0 && !this.spawning) {
             this.spawning = true;
             this.numMonsters += 5;
-            this.spawnMonsters(this.numMonsters);
+            let monstersChosen = this.pickMonsters();
+            console.log(monstersChosen);
+            this.spawnMonsters(this.numMonsters, monstersChosen);
         }
     }
 
     hurtMonster(monster, bullet) {
+        // damage monsters and destroy them if health is 0
         monster.health -= bullet.damage;
         bullet.destroy();
         if(monster.health <= 0) { monster.destroy(); }
@@ -92,7 +96,6 @@ class Play extends Phaser.Scene {
     gotHit(player, monster){
         //player.health -= monster.damage;
         player.knockback(monster);
-
     }
 
     disableScreen(){
@@ -103,7 +106,7 @@ class Play extends Phaser.Scene {
         } 
     }
 
-    spawnMonsters(num) {
+    spawnMonsters(num, monsterArr) {
         // spawn num times every second
         let spawnTimer = this.time.addEvent({
             delay: 1000,
@@ -115,14 +118,15 @@ class Play extends Phaser.Scene {
                     var randY = this.player.y + Math.sin(Phaser.Math.Between(0, 2 * Math.PI)) * Phaser.Math.Between(200, 500);
 
                     // see if monster is outside of bounds, inside player radius, or overlapping with another monster
-                    var outsideBounds = randX < 72 || randX > this.boundWidth - 72 || randY < 72 || randY > this.boundHeight - 72;
+                    var outsideBounds = randX < 72 || randX > this.boundWidth - 120 || randY < 120 || randY > this.boundHeight - 120;
                     var insidePlayerRad = Phaser.Math.Distance.Between(this.player.x, this.player.y, randX, randY) < 200;
-                    var overlapping = this.monsters.getChildren().filter(enemy => randX >= enemy.x - 72 && randX <= enemy.x  + 72 &&
-                                                                                  randY >= enemy.y - 72 && randY <= enemy.y + 72);
+                    var overlapping = this.monsters.getChildren().filter(enemy => randX >= enemy.x - 120 && randX <= enemy.x  + 120 &&
+                                                                                  randY >= enemy.y - 120 && randY <= enemy.y + 120);
                 } while(outsideBounds || insidePlayerRad || overlapping.length > 0);
 
-                // spawn monster
-                this.monsters.add(new BasicMonster(this, randX, randY, 'slime_enemy').setOrigin(0.5, 0.5));
+                // spawn monsters from monsterArr at random
+                let monster = monsterArr[Phaser.Math.Between(0, monsterArr.length - 1)];
+                this.monsters.add(new monster(this, randX, randY, 'slime_enemy').setOrigin(0.5, 0.5));
                 
                 // check if done spawning
                 if(spawnTimer.getRepeatCount() == num - 1) {
@@ -132,7 +136,17 @@ class Play extends Phaser.Scene {
             callbackScope: this
         });
     }
+
+    pickMonsters() {
+        // pick 4 random monsters to put into an array
+        let arr = [];
+        for(let i = 0; i < 4; ++i) {
+            arr.push(this.monsterTypes[Phaser.Math.Between(0, this.monsterTypes.length - 1)]);
+        }
+        return arr;
+    }
     
+    // this may be un needed but I'm not sure yet
     chooseSign() {
         if(Math.floor(Math.random() * 2) % 2 == 0) { return 1; }
         else { return -1; }

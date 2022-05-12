@@ -1,4 +1,4 @@
-class BasicMonster extends Phaser.Physics.Arcade.Sprite {
+class BruteMonster extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, texture) {
         super(scene, x, y, texture);
         scene.physics.add.existing(this);
@@ -7,13 +7,13 @@ class BasicMonster extends Phaser.Physics.Arcade.Sprite {
 
         // physics settings
         this.setPushable(false);
-        this.speed = 50;
-        this.health = 100;
-        this.damage = 20;
+        this.speed = 30;
+        this.health = 200;
+        this.damage = 40;
         
         this.setSize(75, 67);
         this.setOffset(10, 27);
-        this.scale = 0.75;
+        this.scale = 1.25;
 
         this.anims.create({
             key: 'slime_move',
@@ -23,7 +23,7 @@ class BasicMonster extends Phaser.Physics.Arcade.Sprite {
         });
         this.anims.play('slime_move');
 
-        //console.log('spawned basic');
+        //console.log('spawned brute');
         console.log(this.x + ', ' + this.y)
     }
 
