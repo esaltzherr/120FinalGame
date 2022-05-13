@@ -8,7 +8,6 @@ class Gun extends Phaser.Physics.Arcade.Sprite {
         // physics settings
         this.setPushable(false);
 
-
         this.fireMaxCooldown = 50;
         this.fireCooldown = this.fireMaxCooldown;
         this.depth = 2;
@@ -30,7 +29,7 @@ class Gun extends Phaser.Physics.Arcade.Sprite {
         var facing = '';
 
 
-        
+        this.getMouseCoords();
         // spawn player at 0,0 so the mouse can be tracked from an offset of 0,0 because that doesnt track canvas
         let angle = Phaser.Math.Angle.Between(this.x, this.y, this.scene.input.activePointer.worldX, this.scene.input.activePointer.worldY);
         angle = angle * (180/Math.PI);
@@ -72,4 +71,13 @@ class Gun extends Phaser.Physics.Arcade.Sprite {
             }
         }
     }
+    getMouseCoords() {
+        // Takes a Camera and updates this Pointer's worldX and worldY values so they are the result of a translation through the given Camera.
+        this.scene.input.activePointer.updateWorldPoint(this.scene.cameras.main);
+        const pointer = this.scene.input.activePointer
+        return {
+          mouseX: pointer.worldX,
+          mouseY: pointer.worldY,
+        }
+      }
 }
