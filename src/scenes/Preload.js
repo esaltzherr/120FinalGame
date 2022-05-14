@@ -14,7 +14,7 @@ class Preload extends Phaser.Scene {
         console.log("Yes It loaded EryTing");
     }
     create() {
-        this.scene.start('playscene')
+        this.scene.start('menuscene')
     }
 }
 //export default Preload
