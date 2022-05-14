@@ -2,9 +2,9 @@ class TemplateMonster extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, texture, config = {
         speed: 50,
         health: 100,
-        meleeDamage: 20,
-        sizeX: 75,
-        sizeY: 67,
+        meleeDamage: 10,
+        sizeX: 50,
+        sizeY: 50,
         offsetX: 0,
         offsetY: 0,
         scale: 1
