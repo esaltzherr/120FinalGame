@@ -68,6 +68,7 @@ class Gun extends Phaser.Physics.Arcade.Sprite {
                 this.scene.bullets.add(bullet);
                 this.scene.physics.moveTo(bullet, this.scene.input.mousePointer.worldX, this.scene.input.mousePointer.worldY, bullet.speed);
                 this.fireCooldown = this.fireMaxCooldown;
+                this.scene.sound.play('temp_shoot');
             }
         }
     }
