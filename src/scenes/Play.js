@@ -36,9 +36,13 @@ class Play extends Phaser.Scene {
         var r3 = this.add.rectangle(0, 0, this.boundWidth, this.boundHeight).setOrigin(0, 0);
         r3.setStrokeStyle(3, 0x1a65ac);
 
+        // extras
+        var r1 = this.add.rectangle(200, 200, 148, 148, 0x6666ff);
+        this.add.text(0,0,"Controls: \nWASD\nSpace - Dash\nShift - Heal\nRightMouseButton - Sword\nLeftMouseButton - Shoot",  { font: '"Press Start 2P"' });
+
+        // Mouse Control
         this.input.mouse.disableContextMenu();
         this.input.setPollAlways();
-        this.add.text(0,0,"Controls: \nWASD\nSpace - Dash\nShift - Heal\nRightMouseButton - Sword\nLeftMouseButton - Shoot",  { font: '"Press Start 2P"' });
 
         // spawn monsters in first round
         this.monsterTypes = [BasicMonster, BruteMonster];
@@ -48,18 +52,35 @@ class Play extends Phaser.Scene {
         this.spawnMonsters(this.numMonsters, [BasicMonster]);
         this.spawning = true;
 
-        this.bullets = this.physics.add.group();
-
-        var r1 = this.add.rectangle(200, 200, 148, 148, 0x6666ff);
-
+        // player setup 
         this.player = new Player(this, 200, 200, 'dudeDown');
         this.player.body.setCollideWorldBounds(true);
         this.cameras.main.startFollow(this.player);
+        this.bullets = this.physics.add.group();
 
-        // minimap
+        // minimap (MAY PUT IT IN SEPARATE HUD SCENE)
         this.minimap = this.cameras.add(10, 10, 175, 100).setZoom(0.1).setName('mini');
         this.minimap.setBackgroundColor(0x002244);
-
+/*
+        // wave counter (DOESN'T WORK, MAY PUT IT IN SEPARATE HUD SCENE)
+        let waveConfig = {
+            fontFamily: "Fantasy",
+            fontSize: "40px",
+            backgroundColor: "#ebc034",
+            color: "#615439",
+            align: "left",
+            padding: {
+                top: 5,
+                bottom: 5,
+                left: 5,
+                right: 5,
+            },
+            fixedWidth: 0
+        };
+        this.waveNumber = 1;
+        this.waveCounter = this.add.text(game.config.width * 0.8, game.config.height * 0.25, 'Wave: ' + this.waveNumber, waveConfig);
+*/
+        // physics setup
         this.physics.add.collider(this.monsters, this.monsters);
         this.physics.add.collider(this.player, this.monsters, this.gotHit);
         this.physics.add.collider(this.monsters, this.bullets, this.hurtMonster);
@@ -82,6 +103,7 @@ class Play extends Phaser.Scene {
             this.numMonsters += 5;
             let monstersChosen = this.pickMonsters();
             console.log(monstersChosen);
+            //this.waveNumber++;
             this.spawnMonsters(this.numMonsters, monstersChosen);
         }
     }
@@ -94,7 +116,7 @@ class Play extends Phaser.Scene {
     }
 
     gotHit(player, monster){
-        //player.health -= monster.damage;
+        //player.health -= monster.meleeDamage;
         player.knockback(monster);
     }
 
