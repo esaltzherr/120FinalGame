@@ -8,6 +8,9 @@ class Play extends Phaser.Scene {
         this.load.image('dudeUp','./assets/DudeFaceUp.png');
         this.load.image('bullet','./assets/bullet.png');
         this.load.image('monster', './assets/monster.png');
+        this.load.image('tower_body_temp', './assets/tower_body_temp.png');
+        this.load.image('sentry_head_temp', './assets/sentry_head_temp.png');
+        this.load.image('healer_head_temp', './assets/healer_head_temp.png');
         this.load.image('gun', './assets/gun.png');
         this.load.audio('temp_shoot', './assets/temp_shoot.wav');
 
@@ -46,9 +49,10 @@ class Play extends Phaser.Scene {
         this.input.mouse.disableContextMenu();
         this.input.setPollAlways();
 
-        // spawn monsters in first round
-        this.monsterTypes = [BasicMonster, BruteMonster];
+        // setup monsters and spawn first round
+        this.monsterTypes = [BasicMonster, BruteMonster, SentryMonster];
         this.numMonsters = 10;
+        this.monsterBullets = this.physics.add.group();
         this.monsters = this.physics.add.group();
         this.monsters.runChildUpdate = true;
         this.spawnMonsters(this.numMonsters, [BasicMonster]);
@@ -85,6 +89,10 @@ class Play extends Phaser.Scene {
         // physics setup
         this.physics.add.collider(this.monsters, this.monsters);
         this.physics.add.collider(this.player, this.monsters, this.gotHit);
+        this.physics.add.collider(this.player, this.monsterBullets, (player, bullet) => {
+            this.gotHit(player, bullet);
+            bullet.destroy();
+        });
         this.physics.add.collider(this.monsters, this.bullets, this.hurtMonster);
         this.physics.add.collider(this.player.knife, this.monsters, (knife, monster) => { monster.destroy(); });
         
@@ -150,7 +158,7 @@ class Play extends Phaser.Scene {
 
                 // spawn monsters from monsterArr at random
                 let monster = monsterArr[Phaser.Math.Between(0, monsterArr.length - 1)];
-                this.monsters.add(new monster(this, randX, randY, 'slime_enemy').setOrigin(0.5, 0.5));
+                this.monsters.add(new monster(this, randX, randY).setOrigin(0.5, 0.5));
                 
                 // check if done spawning
                 if(spawnTimer.getRepeatCount() == num - 1) {
