@@ -10,8 +10,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         //this.body.collideWorldBounds = true;
 
-        this.setSize(this.width / 2, this.height / 2);
-        this.setOffset(this.width / 5, this.height / 2);
+        this.setSize(this.width - 10, this.height - 10);
+        this.setOffset(this.width / 5 + 10, this.height / 2 + 10);
 
         this.fireMaxCooldown = 50;
         this.fireCooldown = this.fireMaxCooldown;
