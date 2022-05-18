@@ -38,7 +38,7 @@ class Play extends Phaser.Scene {
         keySHIFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
 
         keyO = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.O);
-        
+        keyL = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L);
     }
 
     create() {
@@ -60,8 +60,10 @@ class Play extends Phaser.Scene {
         this.input.mouse.disableContextMenu();
         this.input.setPollAlways();
 
-        // spawn monsters in first round
-        this.monsterTypes = [BasicMonster, BruteMonster];
+
+        // setup monsters and spawn first round
+        this.monsterTypes = [BasicMonster, BruteMonster, SentryMonster, HealerMonster];
+
         this.numMonsters = 10;
         this.monsters = this.physics.add.group();
         this.monsters.runChildUpdate = true;
@@ -104,6 +106,11 @@ class Play extends Phaser.Scene {
         
         this.physics.add.collider(this.monsters, this.bullets, this.destroy);
         this.physics.add.collider(this.player.knife, this.monsters, this.killMonster);
+
+        // FOR DEBUG ONLY: CLEAR WAVE
+        keyL.on("down", (key, event) => { 
+            this.monsters.clear(1, 1);
+        });
     }
 
     update() {
