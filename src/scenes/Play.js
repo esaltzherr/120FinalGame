@@ -16,7 +16,7 @@ class Play extends Phaser.Scene {
 
         this.load.image('player_gun', './assets/player_gun.png');
         this.load.spritesheet('slime_enemy', './assets/slime_enemy.png', { frameWidth: 96, frameHeight: 96});
-        
+         
 
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
