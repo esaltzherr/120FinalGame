@@ -25,9 +25,17 @@ class HealerMonster extends TemplateMonster {
 
         // heal on designated intervals
         if(this.timer == this.healInterval) {
-            // heal and reset timer
             this.timer = 0;
-            
+
+            // get all monsters that are spawned
+            let children = this.scene.monsters.getChildren();
+            for(let i = 0; i < children.length; ++i) {
+                // if a given monster is not a healer and is within 150 pixels, heal them
+                if(!(children[i] instanceof HealerMonster) && 
+                   Phaser.Math.Distance.Between(this.x, this.y, children[i].x, children[i].y) < 150) {
+                       children[i].heal();
+                }
+            }
         }
         this.timer++;
     }
