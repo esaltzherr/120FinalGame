@@ -10,20 +10,20 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         //this.body.collideWorldBounds = true;
 
-        this.setSize(this.width / 2, this.height / 2);
-        this.setOffset(this.width / 5, this.height / 2);
+        this.setSize(this.width - 10, this.height - 10);
+        this.setOffset(this.width / 5 + 10, this.height / 2 + 10);
 
         this.fireMaxCooldown = 50;
         this.fireCooldown = this.fireMaxCooldown;
 
-        this.gun = new Gun(this.scene, this.x, this.y, 'player_gun', this);
+        this.gun = new Gun(this.scene, this.x, this.y + 50, 'player_gun', this).setOrigin(0.5, 0.25);
         this.knife = new Knife(this.scene, this.x, this.y, 'NOTHING', this);
 
         // Facing for animations and dashing
         this.facing = 'South';
         this.walkingDirection = 'South';
         this.moving = false;
-
+        this.standingStill = true;
 
 
         this.knockedBack = false;
@@ -58,14 +58,40 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.stabCooldown;
         this.stabRadius;
 
+        // animations
+        this.anims.create({
+            key: 'player_idle_down',
+            frames: 'player_idle_right',
+            frameRate: 4,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'player_idle_up',
+            frames: 'player_idle_up_right',
+            frameRate: 4,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'player_run_down',
+            frames: 'player_run_right',
+            frameRate: 20,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'player_run_up',
+            frames: 'player_run_up_right',
+            frameRate: 20,
+            repeat: -1
+        });
     }
 
     update() {
-
         this.move();
+        
         this.gun.update();
-        this.knife.update();
         this.facing = this.gun.facing;
+        this.knife.update();
+        
         this.abilities();
         this.timers();
         if (this.dashing || this.healing || this.stabbing || this.knockedBack) {
@@ -131,24 +157,45 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         if (moveDirection != '' && moveDirection != this.moveDirection) {
             this.moveDirection = moveDirection;
         }
+       
+        if(moveDirection.length > 0){
+            this.standingStill = false;
+            //console.log("HJFOKDSHFJKHDSJKFHSKDJHKJ");
+        }
+        else{
+            this.standingStill = true;
+        }
+
 
         // Same Animations for each direction but flipped to match direction
         if (this.facing.includes('East')) {
-            this.flipX = true;
+            this.flipX = false;
         }
         else if (this.facing.includes('West')) {
-            this.flipX = false
+            this.flipX = true
         }
         if (this.facing.includes('North')) {
             // set to Angled Up animation
-            this.setTexture('dudeUp');
+            if(this.standingStill){
+                this.anims.play('player_idle_up', true);
+            }
+            else{
+                this.anims.play('player_run_up', true);
+            }
             this.depth = 3;
         }
         else if (this.facing.includes('South')) {
             // set to Angled Down animationdw
-            this.setTexture('dudeDown');
+            if(this.standingStill){
+                this.anims.play('player_idle_down', true);
+            }
+            else{
+                this.anims.play('player_run_down', true);
+                
+            }
             this.depth = 1;
         }
+        
 
     }
     abilities() {
@@ -228,8 +275,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     }
     moveEntity(horizontal, verticle, speed) {
-        this.scene.physics.moveTo(this, horizontal + this.x, verticle + this.y, speed);
-        this.scene.physics.moveTo(this.gun, horizontal + this.x, verticle + this.y, speed);
+        this.scene.physics.moveTo(this, horizontal * 100 + this.x, verticle * 100 + this.y, speed);
+        this.scene.physics.moveTo(this.gun, horizontal * 100 + this.x, verticle * 100 + this.y, speed);
     }
     knockback(monster){
         this.knockedBack = true;
