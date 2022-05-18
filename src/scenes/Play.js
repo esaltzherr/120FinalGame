@@ -38,6 +38,12 @@ class Play extends Phaser.Scene {
 
     create() {
         // world bounds
+
+        this.events.on('resume', (scene, data) => {
+            console.log(data);
+            
+        });
+
         this.boundWidth = this.game.config.width * 2.5;
         this.boundHeight = this.game.config.height * 2.5;
         this.physics.world.setBounds(0, 0, this.boundWidth, this.boundHeight);
