@@ -2,7 +2,7 @@ class SentryMonster extends TemplateMonster {
     constructor(scene, x, y, texture = 'tower_body_temp') {
         super(scene, x, y, texture, {
             speed: 0,
-            health: 250,
+            health: 200,
             meleeDamage: 10,
             sizeX: 80,
             sizeY: 100,
@@ -14,8 +14,8 @@ class SentryMonster extends TemplateMonster {
 
         // healing and shooting timers
         this.timer = 0;
-        this.fireInterval = 60;
-        this.coolDownInterval = 300;
+        this.fireInterval = 90;
+        this.coolDownInterval = 450;
         this.coolDownTime = 180;
         this.coolingDown = false;
 

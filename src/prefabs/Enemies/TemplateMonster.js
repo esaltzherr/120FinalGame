@@ -17,7 +17,8 @@ class TemplateMonster extends Phaser.Physics.Arcade.Sprite {
         // physics settings
         this.setPushable(false);
         this.speed = config.speed;
-        this.health = config.health;
+        this.maxHealth = config.health;
+        this.health = this.maxHealth;
         this.meleeDamage = config.meleeDamage;
 
         // size settings
@@ -32,5 +33,14 @@ class TemplateMonster extends Phaser.Physics.Arcade.Sprite {
         this.scene.physics.moveTo(this, this.scene.player.x, this.scene.player.y, this.speed);
         if(this.scene.player.x < this.x) { this.flipX = true; }
         else { this.flipX = false; }
+    }
+
+    heal() {
+        if(this.health <= this.maxHealth - 50){
+            this.health += 50;
+            if(this.health > this.maxHealth) { this.health = this.maxHealth; }
+            //console.log('healed');
+            //console.log(this.health);
+        }
     }
 }
