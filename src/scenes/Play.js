@@ -11,6 +11,7 @@ class Play extends Phaser.Scene {
         this.load.image('tower_body_temp', './assets/tower_body_temp.png');
         this.load.image('sentry_head_temp', './assets/sentry_head_temp.png');
         this.load.image('healer_head_temp', './assets/healer_head_temp.png');
+        this.load.image('heal_particle_temp', './assets/heal_particle_temp.png');
         this.load.image('gun', './assets/gun.png');
         this.load.audio('temp_shoot', './assets/temp_shoot.wav');
 
