@@ -41,7 +41,6 @@ class Play extends Phaser.Scene {
 
         this.events.on('resume', (scene, data) => {
             console.log(data);
-            
         });
 
         this.boundWidth = this.game.config.width * 2.5;
@@ -129,7 +128,7 @@ class Play extends Phaser.Scene {
             this.spawning = true;
             this.numMonsters += 5;
             let monstersChosen = this.pickMonsters();
-            console.log(monstersChosen);
+            //console.log(monstersChosen);
             //this.waveNumber++;
             this.spawnMonsters(this.numMonsters, monstersChosen);
         }
@@ -149,7 +148,7 @@ class Play extends Phaser.Scene {
 
     disableScreen(){
         if(Phaser.Input.Keyboard.JustDown(keyO)){    
-            console.log(this); 
+            //console.log(this); 
             this.scene.launch('selectscene');
             this.scene.pause();
         } 
