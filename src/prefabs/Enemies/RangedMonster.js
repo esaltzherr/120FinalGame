@@ -1,37 +1,51 @@
-class SentryMonster extends TemplateMonster {
-    constructor(scene, x, y, texture = 'tower_body_temp') {
+class RangedMonster extends TemplateMonster {
+    constructor(scene, x, y, texture = 'slime_enemy') {
         super(scene, x, y, texture, {
-            speed: 0,
-            health: 200,
+            speed: 80,
+            health: 100,
             meleeDamage: 10,
-            sizeX: 80,
-            sizeY: 100,
-            offsetX: 0,
-            offsetY: 0,
-            scale: 1
+            sizeX: 75,
+            sizeY: 67,
+            offsetX: 10,
+            offsetY: 27,
+            scale: 0.75
         });
-        this.head = scene.add.sprite(this.x, this.y - 40, 'sentry_head_temp').setOrigin(0.5, 0.5);
 
-        // shooting and cooldown timers
         this.timer = 0;
-        this.fireInterval = 90;
+        this.fireInterval = 180;
         this.coolDownInterval = 450;
         this.coolDownTime = 180;
         this.coolingDown = false;
 
-        console.log('spawned sentry');
+        this.anims.create({
+            key: 'slime_move',
+            frames: 'slime_enemy',
+            frameRate: 4,
+            repeat: -1
+        });
+        this.anims.play('slime_move');
+
+        console.log('spawned ranged');
     }
 
     update() {
         let playerX = this.scene.player.x;
         let playerY = this.scene.player.y;
-        if(Phaser.Math.Distance.Between(this.x, this.y, playerX, playerY) < 500) {
-            // have head follow player
-            this.head.rotation = Math.atan2(playerY - this.y, playerX - this.x);
 
+        if(Phaser.Math.Distance.Between(this.x, this.y, playerX, this.scene.player.y) > 200) {
+            this.scene.physics.accelerateTo(this, playerX, this.scene.player.y, this.speed, this.speed, this.speed);
+        }
+        else {
+            this.setVelocity(0, 0);
+        }
+
+        if(playerX < this.x) { this.flipX = true; }
+        else { this.flipX = false; }
+
+        if(Phaser.Math.Distance.Between(this.x, this.y, playerX, playerY) < 500) {
             // shoot on designated intervals
             if(this.timer % this.fireInterval == 0 && this.timer != 0 && !this.coolingDown) {
-                let bullet = new Bullet(this.scene, this.head.x, this.head.y, 'bullet');
+                let bullet = new Bullet(this.scene, this.x, this.y, 'bullet');
                 bullet.speed = 300;
                 this.scene.monsterBullets.add(bullet);
                 this.scene.physics.moveTo(bullet, playerX, playerY, bullet.speed);
@@ -50,10 +64,5 @@ class SentryMonster extends TemplateMonster {
             }
             this.timer++;
         }
-    }
-
-    destroy() {
-        this.head.destroy();
-        super.destroy();
     }
 }
