@@ -57,7 +57,7 @@ class Play extends Phaser.Scene {
         this.input.setPollAlways();
 
         // setup monsters and spawn first round
-        this.monsterTypes = [BasicMonster, BruteMonster, SentryMonster, HealerMonster];
+        this.monsterTypes = [BasicMonster, BruteMonster, RangedMonster, SentryMonster, HealerMonster];
         this.numMonsters = 10;
         this.monsterBullets = this.physics.add.group();
         this.monsters = this.physics.add.group();
