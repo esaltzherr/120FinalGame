@@ -39,6 +39,11 @@ class Play extends Phaser.Scene {
 
     create() {
         // world bounds
+
+        this.events.on('resume', (scene, data) => {
+            console.log(data);
+        });
+
         this.boundWidth = this.game.config.width * 2.5;
         this.boundHeight = this.game.config.height * 2.5;
         this.physics.world.setBounds(0, 0, this.boundWidth, this.boundHeight);
@@ -102,7 +107,9 @@ class Play extends Phaser.Scene {
             this.numMonsters += 5;
             this.scene.manager.getScene('hud').updateWaveCounter(++this.waveNumber);
             let monstersChosen = this.pickMonsters();
-            console.log(monstersChosen);
+
+            //console.log(monstersChosen);
+
             this.spawnMonsters(this.numMonsters, monstersChosen);
         }
     }
@@ -121,7 +128,7 @@ class Play extends Phaser.Scene {
 
     disableScreen(){
         if(Phaser.Input.Keyboard.JustDown(keyO)){    
-            console.log(this); 
+            //console.log(this); 
             this.scene.launch('selectscene');
             this.scene.pause();
         } 
