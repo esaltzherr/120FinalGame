@@ -11,6 +11,7 @@ class Play extends Phaser.Scene {
         this.load.image('tower_body_temp', './assets/tower_body_temp.png');
         this.load.image('sentry_head_temp', './assets/sentry_head_temp.png');
         this.load.image('healer_head_temp', './assets/healer_head_temp.png');
+        this.load.image('heal_particle_temp', './assets/heal_particle_temp.png');
         this.load.image('gun', './assets/gun.png');
         this.load.audio('temp_shoot', './assets/temp_shoot.wav');
 
@@ -61,42 +62,22 @@ class Play extends Phaser.Scene {
         this.input.setPollAlways();
 
         // setup monsters and spawn first round
-        this.monsterTypes = [BasicMonster, BruteMonster, SentryMonster, HealerMonster];
+        this.monsterTypes = [BasicMonster, BruteMonster, RangedMonster, SentryMonster, HealerMonster];
         this.numMonsters = 10;
         this.monsterBullets = this.physics.add.group();
         this.monsters = this.physics.add.group();
         this.monsters.runChildUpdate = true;
         this.spawnMonsters(this.numMonsters, [BasicMonster]);
         this.spawning = true;
+        this.waveNumber = 1;
 
         // player setup 
         this.player = new Player(this, 200, 200, 'dudeDown');
         this.player.body.setCollideWorldBounds(true);
         this.cameras.main.startFollow(this.player);
         this.bullets = this.physics.add.group();
+        this.scene.launch('hud')
 
-        // minimap (MAY PUT IT IN SEPARATE HUD SCENE)
-        this.minimap = this.cameras.add(10, 10, 175, 100).setZoom(0.1).setName('mini');
-        this.minimap.setBackgroundColor(0x002244);
-/*
-        // wave counter (DOESN'T WORK, MAY PUT IT IN SEPARATE HUD SCENE)
-        let waveConfig = {
-            fontFamily: "Fantasy",
-            fontSize: "40px",
-            backgroundColor: "#ebc034",
-            color: "#615439",
-            align: "left",
-            padding: {
-                top: 5,
-                bottom: 5,
-                left: 5,
-                right: 5,
-            },
-            fixedWidth: 0
-        };
-        this.waveNumber = 1;
-        this.waveCounter = this.add.text(game.config.width * 0.8, game.config.height * 0.25, 'Wave: ' + this.waveNumber, waveConfig);
-*/
         // physics setup
         this.physics.add.collider(this.monsters, this.monsters);
         this.physics.add.collider(this.player, this.monsters, this.gotHit);
@@ -118,18 +99,17 @@ class Play extends Phaser.Scene {
 
     update() {
         this.disableScreen();
-        
         this.player.update();
-        this.minimap.scrollX = this.player.x;
-        this.minimap.scrollY = this.player.y;
 
         // at end of round, spawn 5 more monsters than last round
         if(this.monsters.getLength() == 0 && !this.spawning) {
             this.spawning = true;
             this.numMonsters += 5;
+            this.scene.manager.getScene('hud').updateWaveCounter(++this.waveNumber);
             let monstersChosen = this.pickMonsters();
+
             //console.log(monstersChosen);
-            //this.waveNumber++;
+
             this.spawnMonsters(this.numMonsters, monstersChosen);
         }
     }

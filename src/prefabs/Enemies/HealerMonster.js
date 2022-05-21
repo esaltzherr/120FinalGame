@@ -33,11 +33,31 @@ class HealerMonster extends TemplateMonster {
                 // if a given monster is not a healer and is within 150 pixels, heal them
                 if(!(children[i] instanceof HealerMonster) && 
                    Phaser.Math.Distance.Between(this.x, this.y, children[i].x, children[i].y) < 150) {
-                       children[i].heal();
+                        children[i].heal();
+                        this.pulseParticles();                        
                 }
             }
         }
         this.timer++;
+    }
+
+    pulseParticles() {
+        // pulse particles in cirlce
+        let particleManager = this.scene.add.particles('heal_particle_temp');
+        let dz = new Phaser.Geom.Circle(this.x, this.y, 150);
+        let emitter = particleManager.createEmitter({
+            x: this.x,
+            y: this.y,
+            lifespan: { min: 600, max: 800 },
+            angle: { start: 0, end: 360, steps: 100 },
+            speed: 200,
+            quantity: 100,
+            scale: { start: 0.5, end: 0.25 },
+            frequency: 600,
+            deathZone: { source: dz },
+            deathCallback: () => { particleManager.destroy(); }
+        });
+        emitter.deathZone.killOnEnter = false;
     }
 
     destroy() {
