@@ -107,7 +107,9 @@ class Play extends Phaser.Scene {
             this.numMonsters += 5;
             this.scene.manager.getScene('hud').updateWaveCounter(++this.waveNumber);
             let monstersChosen = this.pickMonsters();
-            console.log(monstersChosen);
+
+            //console.log(monstersChosen);
+
             this.spawnMonsters(this.numMonsters, monstersChosen);
         }
     }
