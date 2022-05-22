@@ -2,11 +2,11 @@ class Play extends Phaser.Scene {
     constructor() {
         super("playscene");
     }
-    
-    preload(){
-        this.load.image('dudeDown','./assets/DudeFaceDown.png');
-        this.load.image('dudeUp','./assets/DudeFaceUp.png');
-        this.load.image('bullet','./assets/bullet.png');
+
+    preload() {
+        this.load.image('dudeDown', './assets/DudeFaceDown.png');
+        this.load.image('dudeUp', './assets/DudeFaceUp.png');
+        this.load.image('bullet', './assets/bullet.png');
         this.load.image('monster', './assets/monster.png');
         this.load.image('tower_body_temp', './assets/tower_body_temp.png');
         this.load.image('sentry_head_temp', './assets/sentry_head_temp.png');
@@ -16,15 +16,15 @@ class Play extends Phaser.Scene {
         this.load.audio('temp_shoot', './assets/temp_shoot.wav');
 
         // player sprites
-        this.load.spritesheet('player_idle_right', './assets/player_idle_right.png', { frameWidth: 96, frameHeight: 96});
-        this.load.spritesheet('player_idle_up_right', './assets/player_idle_up_right.png', { frameWidth: 96, frameHeight: 96});
-        this.load.spritesheet('player_run_right', './assets/player_run_right.png', { frameWidth: 96, frameHeight: 96});
-        this.load.spritesheet('player_run_up_right', './assets/player_run_up_right.png', { frameWidth: 96, frameHeight: 96});
+        this.load.spritesheet('player_idle_right', './assets/player_idle_right.png', { frameWidth: 96, frameHeight: 96 });
+        this.load.spritesheet('player_idle_up_right', './assets/player_idle_up_right.png', { frameWidth: 96, frameHeight: 96 });
+        this.load.spritesheet('player_run_right', './assets/player_run_right.png', { frameWidth: 96, frameHeight: 96 });
+        this.load.spritesheet('player_run_up_right', './assets/player_run_up_right.png', { frameWidth: 96, frameHeight: 96 });
         this.load.image('player_gun', './assets/player_gun.png');
 
         // enemy sprites
-        this.load.spritesheet('slime_enemy', './assets/slime_enemy.png', { frameWidth: 96, frameHeight: 96});
-        this.load.spritesheet('brute_enemy', './assets/brute_enemy.png', { frameWidth: 120, frameHeight: 120});
+        this.load.spritesheet('slime_enemy', './assets/slime_enemy.png', { frameWidth: 96, frameHeight: 96 });
+        this.load.spritesheet('brute_enemy', './assets/brute_enemy.png', { frameWidth: 120, frameHeight: 120 });
         this.load.image('turret_body', './assets/turret_body.png');
         this.load.image('turret_eye', './assets/turret_eye.png');
         this.load.image('healer_body', './assets/healer_body.png');
@@ -35,7 +35,7 @@ class Play extends Phaser.Scene {
         keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
         keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        this.input.keyboard.addCapture(Phaser.Input.Keyboard.KeyCodes.SHIFT); 
+        this.input.keyboard.addCapture(Phaser.Input.Keyboard.KeyCodes.SHIFT);
         keySHIFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
 
         keyO = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.O);
@@ -47,6 +47,38 @@ class Play extends Phaser.Scene {
 
         this.events.on('resume', (scene, data) => {
             console.log(data);
+            switch (data.upgrade[0]) {
+                case 'Shooting':
+                    break;
+                case 'Healing':
+                    break;
+                case 'Movement':
+                    break;
+                case 'Dashing':
+                    break;
+                case 'Stabbing':
+                    break;
+            }
+            switch(data.disable[0]){
+                case 'Shooting':
+                    console.log("SHOOT\n");
+                    this.player.canShoot = false;   
+                    break;
+                case 'Healing':
+                    this.player.canHeal = false;
+                    break;
+                case 'Movement':
+                    this.player.canMove = false;
+                    break;
+                case 'Dashing':
+                    this.player.canDash = false;
+                    break;
+                case 'Stabbing':
+                    this.player.canStab = false;
+                    break;
+            }
+
+
         });
 
         this.boundWidth = this.game.config.width * 2.5;
@@ -60,7 +92,7 @@ class Play extends Phaser.Scene {
 
         // extras
         var r1 = this.add.rectangle(200, 200, 148, 148, 0x6666ff);
-        this.add.text(0,0,"Controls: \nWASD\nSpace - Dash\nShift - Heal\nRightMouseButton - Sword\nLeftMouseButton - Shoot",  { font: '"Press Start 2P"' });
+        this.add.text(0, 0, "Controls: \nWASD\nSpace - Dash\nShift - Heal\nRightMouseButton - Sword\nLeftMouseButton - Shoot", { font: '"Press Start 2P"' });
 
         // Mouse Control
         this.input.mouse.disableContextMenu();
@@ -92,12 +124,12 @@ class Play extends Phaser.Scene {
         });
         this.physics.add.collider(this.monsters, this.bullets, this.hurtMonster);
         this.physics.add.collider(this.player.knife, this.monsters, (knife, monster) => { monster.destroy(); });
-        
+
         this.physics.add.collider(this.monsters, this.bullets, this.destroy);
         this.physics.add.collider(this.player.knife, this.monsters, this.killMonster);
 
         // FOR DEBUG ONLY: CLEAR WAVE
-        keyL.on("down", (key, event) => { 
+        keyL.on("down", (key, event) => {
             this.monsters.clear(1, 1);
         });
     }
@@ -106,13 +138,19 @@ class Play extends Phaser.Scene {
         this.disableScreen();
         this.player.update();
 
+        // Maybe add a second delay after killing the last monster so that it does actually die. or move this update to the beggining of update
+
+
         // at end of round, spawn 5 more monsters than last round
-        if(this.monsters.getLength() == 0 && !this.spawning) {
+        if (this.monsters.getLength() == 0 && !this.spawning) {
             this.spawning = true;
             this.numMonsters += 5;
             this.scene.manager.getScene('hud').updateWaveCounter(++this.waveNumber);
             let monstersChosen = this.pickMonsters();
 
+            this.resetPlayer();
+            this.scene.launch('selectscene', monstersChosen);
+            this.scene.pause();
             //console.log(monstersChosen);
 
             this.spawnMonsters(this.numMonsters, monstersChosen);
@@ -123,20 +161,20 @@ class Play extends Phaser.Scene {
         // damage monsters and destroy them if health is 0
         monster.health -= bullet.damage;
         bullet.destroy();
-        if(monster.health <= 0) { monster.destroy(); }
+        if (monster.health <= 0) { monster.destroy(); }
     }
 
-    gotHit(player, monster){
+    gotHit(player, monster) {
         //player.health -= monster.meleeDamage;
         player.knockback(monster);
     }
 
-    disableScreen(){
-        if(Phaser.Input.Keyboard.JustDown(keyO)){    
+    disableScreen() {
+        if (Phaser.Input.Keyboard.JustDown(keyO)) {
             //console.log(this); 
             this.scene.launch('selectscene');
             this.scene.pause();
-        } 
+        }
     }
 
     spawnMonsters(num, monsterArr) {
@@ -153,16 +191,16 @@ class Play extends Phaser.Scene {
                     // see if monster is outside of bounds, inside player radius, or overlapping with another monster
                     var outsideBounds = randX < 72 || randX > this.boundWidth - 120 || randY < 120 || randY > this.boundHeight - 120;
                     var insidePlayerRad = Phaser.Math.Distance.Between(this.player.x, this.player.y, randX, randY) < 200;
-                    var overlapping = this.monsters.getChildren().filter(enemy => randX >= enemy.x - 120 && randX <= enemy.x  + 120 &&
-                                                                                  randY >= enemy.y - 120 && randY <= enemy.y + 120);
-                } while(outsideBounds || insidePlayerRad || overlapping.length > 0);
+                    var overlapping = this.monsters.getChildren().filter(enemy => randX >= enemy.x - 120 && randX <= enemy.x + 120 &&
+                        randY >= enemy.y - 120 && randY <= enemy.y + 120);
+                } while (outsideBounds || insidePlayerRad || overlapping.length > 0);
 
                 // spawn monsters from monsterArr at random
                 let monster = monsterArr[Phaser.Math.Between(0, monsterArr.length - 1)];
                 this.monsters.add(new monster(this, randX, randY).setOrigin(0.5, 0.5));
-                
+
                 // check if done spawning
-                if(spawnTimer.getRepeatCount() == num - 1) {
+                if (spawnTimer.getRepeatCount() == num - 1) {
                     this.spawning = false;
                 }
             },
@@ -173,15 +211,30 @@ class Play extends Phaser.Scene {
     pickMonsters() {
         // pick 4 random monsters to put into an array
         let arr = [];
-        for(let i = 0; i < 4; ++i) {
+        for (let i = 0; i < 4; ++i) {
             arr.push(this.monsterTypes[Phaser.Math.Between(0, this.monsterTypes.length - 1)]);
         }
         return arr;
     }
-    
+
     // this may be un needed but I'm not sure yet
     chooseSign() {
-        if(Math.floor(Math.random() * 2) % 2 == 0) { return 1; }
+        if (Math.floor(Math.random() * 2) % 2 == 0) { return 1; }
         else { return -1; }
+    }
+    resetPlayer(){
+        this.player.canDash = true;
+        this.player.maxDashCooldown = this.player.defaultDashCooldown
+
+        this.player.canMove = true;
+        this.player.moveSpeed = this.player.defaultMoveSpeed;
+
+        this.player.canShoot = true;
+
+        this.player.canHeal = true;
+        this.player.healAmount = this.player.defaultHealAmount;
+
+        this.player.canStab = true;
+
     }
 }
