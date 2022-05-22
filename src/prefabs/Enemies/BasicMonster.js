@@ -8,7 +8,8 @@ class BasicMonster extends TemplateMonster {
             sizeY: 67,
             offsetX: 10,
             offsetY: 27,
-            scale: .75
+            scale: .75,
+            isTower: false
         });
 
         this.anims.create({

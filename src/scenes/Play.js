@@ -15,15 +15,20 @@ class Play extends Phaser.Scene {
         this.load.image('gun', './assets/gun.png');
         this.load.audio('temp_shoot', './assets/temp_shoot.wav');
 
+        // player sprites
         this.load.spritesheet('player_idle_right', './assets/player_idle_right.png', { frameWidth: 96, frameHeight: 96});
         this.load.spritesheet('player_idle_up_right', './assets/player_idle_up_right.png', { frameWidth: 96, frameHeight: 96});
-        
         this.load.spritesheet('player_run_right', './assets/player_run_right.png', { frameWidth: 96, frameHeight: 96});
         this.load.spritesheet('player_run_up_right', './assets/player_run_up_right.png', { frameWidth: 96, frameHeight: 96});
-
         this.load.image('player_gun', './assets/player_gun.png');
+
+        // enemy sprites
         this.load.spritesheet('slime_enemy', './assets/slime_enemy.png', { frameWidth: 96, frameHeight: 96});
-        
+        this.load.spritesheet('brute_enemy', './assets/brute_enemy.png', { frameWidth: 120, frameHeight: 120});
+        this.load.image('turret_body', './assets/turret_body.png');
+        this.load.image('turret_eye', './assets/turret_eye.png');
+        this.load.image('healer_body', './assets/healer_body.png');
+        this.load.image('healer_eye', './assets/healer_eye.png');
 
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);

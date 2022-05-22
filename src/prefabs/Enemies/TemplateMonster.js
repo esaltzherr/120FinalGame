@@ -7,7 +7,8 @@ class TemplateMonster extends Phaser.Physics.Arcade.Sprite {
         sizeY: 50,
         offsetX: 0,
         offsetY: 0,
-        scale: 1
+        scale: 1,
+        isTower: false
     }) {
         super(scene, x, y, texture);
         scene.physics.add.existing(this);
@@ -20,6 +21,7 @@ class TemplateMonster extends Phaser.Physics.Arcade.Sprite {
         this.maxHealth = config.health;
         this.health = this.maxHealth;
         this.meleeDamage = config.meleeDamage;
+        this.isTower = config.isTower
 
         // size settings
         this.setSize(config.sizeX, config.sizeY);

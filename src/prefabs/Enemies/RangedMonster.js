@@ -8,7 +8,8 @@ class RangedMonster extends TemplateMonster {
             sizeY: 67,
             offsetX: 10,
             offsetY: 27,
-            scale: 0.75
+            scale: 0.75,
+            isTower: false
         });
 
         this.timer = 0;

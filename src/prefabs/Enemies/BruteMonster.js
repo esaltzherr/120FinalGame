@@ -1,23 +1,24 @@
 class BruteMonster extends TemplateMonster {
-    constructor(scene, x, y, texture = 'slime_enemy') {
+    constructor(scene, x, y, texture = 'brute_enemy') {
         super(scene, x, y, texture, {
             speed: 30,
             health: 200,
             meleeDamage: 40,
-            sizeX: 75,
-            sizeY: 67,
-            offsetX: 10,
-            offsetY: 27,
-            scale: 1.25
+            sizeX: 120,
+            sizeY: 120,
+            offsetX: 0,
+            offsetY: 0,
+            scale: 0.95,
+            isTower: false
         });
 
         this.anims.create({
-            key: 'slime_move',
-            frames: 'slime_enemy',
+            key: 'brute_move',
+            frames: 'brute_enemy',
             frameRate: 4,
             repeat: -1
         });
-        this.anims.play('slime_move');
+        this.anims.play('brute_move');
 
         console.log('spawned brute');
     }
