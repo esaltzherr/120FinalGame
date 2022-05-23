@@ -8,10 +8,14 @@ class Gun extends Phaser.Physics.Arcade.Sprite {
         // physics settings
         this.setPushable(false);
 
-        this.fireMaxCooldown = 50;
+
+        this.fireMaxCooldown = this.player.defaultShootCooldown;
         this.fireCooldown = this.fireMaxCooldown;
+        console.log(this.fireMaxCooldown);
+
         this.depth = 2;
         this.angle = 0;
+        this.canShoot = true;
     }
 
     update() {
@@ -87,5 +91,11 @@ class Gun extends Phaser.Physics.Arcade.Sprite {
             mouseX: pointer.worldX,
             mouseY: pointer.worldY,
         }
+    }
+    updateUpgrades(){
+        console.log("HEHEHEH");
+        this.fireMaxCooldown = this.player.shootCoolDown;
+        console.log(this.fireMaxCooldown);
+        this.damage = this.player.bulletDamage;
     }
 }
