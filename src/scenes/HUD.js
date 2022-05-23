@@ -27,11 +27,16 @@ class HUD extends Phaser.Scene {
         };
         this.waveCounter = this.add.text(game.config.width * 0.8, game.config.height * 0.05, 
                                          'Wave: ' + this.playScene.waveNumber, waveConfig);
+
+
+        //this.option1 = this.add.rectangle(450, 100, 148, 296, 0x6666ff).setOrigin(0, 0);
+
     }
 
     update() {
         this.minimap.scrollX = this.playScene.player.x;
         this.minimap.scrollY = this.playScene.player.y;
+        
     }
 
     updateWaveCounter(waveNum) {
