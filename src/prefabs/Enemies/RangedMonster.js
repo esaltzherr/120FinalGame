@@ -47,6 +47,7 @@ class RangedMonster extends TemplateMonster {
             // shoot on designated intervals
             if(this.timer % this.fireInterval == 0 && this.timer != 0 && !this.coolingDown) {
                 let bullet = new Bullet(this.scene, this.x, this.y, 'bullet');
+                bullet.rotation = Math.atan2(playerY - this.y, playerX - this.x);
                 bullet.speed = 300;
                 this.scene.monsterBullets.add(bullet);
                 this.scene.physics.moveTo(bullet, playerX, playerY, bullet.speed);

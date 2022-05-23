@@ -15,8 +15,8 @@ class SentryMonster extends TemplateMonster {
 
         // shooting and cooldown timers
         this.timer = 0;
-        this.fireInterval = 90;
-        this.coolDownInterval = 450;
+        this.fireInterval = 120;
+        this.coolDownInterval = 480;
         this.coolDownTime = 180;
         this.coolingDown = false;
 
@@ -33,6 +33,7 @@ class SentryMonster extends TemplateMonster {
             // shoot on designated intervals
             if(this.timer % this.fireInterval == 0 && this.timer != 0 && !this.coolingDown) {
                 let bullet = new Bullet(this.scene, this.head.x, this.head.y, 'bullet');
+                bullet.rotation = this.head.rotation;
                 bullet.speed = 300;
                 this.scene.monsterBullets.add(bullet);
                 this.scene.physics.moveTo(bullet, playerX, playerY, bullet.speed);
