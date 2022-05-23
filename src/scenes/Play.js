@@ -52,7 +52,7 @@ class Play extends Phaser.Scene {
                     break;
                 case 'Healing':
                     break;
-                case 'Movement':
+                case 'Walking':
                     break;
                 case 'Dashing':
                     break;
@@ -67,7 +67,7 @@ class Play extends Phaser.Scene {
                 case 'Healing':
                     this.player.canHeal = false;
                     break;
-                case 'Movement':
+                case 'Walking':
                     this.player.canWalk = false;
                     break;
                 case 'Dashing':
@@ -226,7 +226,7 @@ class Play extends Phaser.Scene {
         this.player.canDash = true;
         this.player.maxDashCooldown = this.player.defaultDashCooldown
 
-        this.player.canMove = true;
+        this.player.canWalk = true;
         this.player.moveSpeed = this.player.defaultMoveSpeed;
 
         this.player.canShoot = true;
