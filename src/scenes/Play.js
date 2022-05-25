@@ -188,7 +188,7 @@ class Play extends Phaser.Scene {
         // at end of round, spawn 5 more monsters than last round
         if (this.monsters.getLength() == 0 && !this.spawning) {
             this.spawning = true;
-            this.numMonsters += 5;
+            if(this.numMonsters < 50) { this.numMonsters += 5; }
             this.scene.manager.getScene('hud').updateWaveCounter(++this.waveNumber);
             this.monstersChosen = this.pickMonsters();
 
