@@ -6,7 +6,7 @@ let config = {
     physics: {
       default: "arcade",
       arcade: {
-        debug: false
+        debug: true
       }
     },
     scene: [ Preload, Menu, Play, Select, HUD ]

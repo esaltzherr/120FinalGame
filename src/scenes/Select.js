@@ -3,13 +3,35 @@ class Select extends Phaser.Scene {
         super('selectscene');
     }
 
-
-
     create() {
-        this.nextWave;
-        //this.events.on('start', (scene, data) => {
-        //    this.nextWave = data;
-        //});
+        this.nextWave = [];
+
+        this.events.on('create', (scene, data) => {
+            // choose monstsers to display for next round
+            let chosen = this.scene.manager.getScene('playscene').monstersChosen; 
+            let offset = -125;
+            for(let i = 0; i < chosen.length; ++i) {
+                if(chosen[i] == BasicMonster) {
+                    this.add.sprite(game.config.width * 0.5 + offset, game.config.height * 0.15, 'slime_enemy').setOrigin(0.5, 0.5);
+                }
+                else if(chosen[i] == BruteMonster) {
+                    this.add.sprite(game.config.width * 0.5 + offset, game.config.height * 0.15, 'brute_enemy').setOrigin(0.5, 0.5);
+                }
+                else if(chosen[i] == RangedMonster) {
+                    this.add.sprite(game.config.width * 0.5 + offset, game.config.height * 0.15, 'slime_enemy').setOrigin(0.5, 0.5);
+                }
+                else if(chosen[i] == SentryMonster) {
+                    this.add.sprite(game.config.width * 0.5 + offset, game.config.height * 0.15, 'turret_body').setOrigin(0.5, 0.5);
+                }
+                else if(chosen[i] == HealerMonster) {
+                    this.add.sprite(game.config.width * 0.5 + offset, game.config.height * 0.15, 'healer_body').setOrigin(0.5, 0.5);
+                }
+                else {
+                    console.log('how did you even get here???');
+                }
+                offset += 100
+            }
+         });
 
         var abilities = ["Walking ", "Shooting", "Dashing", "Stabing", "Healing"];
 
