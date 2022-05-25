@@ -192,6 +192,8 @@ class Play extends Phaser.Scene {
             this.scene.manager.getScene('hud').updateWaveCounter(++this.waveNumber);
             this.monstersChosen = this.pickMonsters();
 
+            this.bullets.clear(1, 1);
+            this.monsterBullets.clear(1, 1);
             this.resetPlayer();
             this.scene.launch('selectscene', this.monstersChosen);
             this.scene.pause();
