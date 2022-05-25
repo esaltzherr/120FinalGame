@@ -173,7 +173,10 @@ class Play extends Phaser.Scene {
     }
 
     gotHit(player, monster) {
-        //player.health -= monster.meleeDamage;
+        if(player.canTakeDamage){
+            player.health -= monster.meleeDamage;
+        }
+            
         player.knockback(monster);
     }
 
