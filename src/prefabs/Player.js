@@ -209,7 +209,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     abilities() {
         if (this.canHeal) {
             if (keySHIFT.isDown && !this.dashing && !this.stabbing) {
-                console.log("Heal");
                 if(this.health < this.maxHealth){
                     if(this.health + this.healAmount < this.maxHealth){
                         this.health += this.healAmount;

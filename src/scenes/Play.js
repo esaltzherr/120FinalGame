@@ -158,7 +158,7 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.monsters, this.monsters);
         this.physics.add.collider(this.player, this.monsters, this.gotHit);
         this.physics.add.collider(this.player, this.monsterBullets, (player, bullet) => {
-            this.gotHit(player, bullet);
+            this.gotShot(player, bullet);
             bullet.destroy();
         });
         this.physics.add.collider(this.monsters, this.bullets, this.hurtMonster);
@@ -223,7 +223,13 @@ class Play extends Phaser.Scene {
             
         player.knockback(monster);
     }
-
+    gotShot(player, bullet) {
+        if(player.canTakeDamage){
+            player.health -= bullet.damage;
+        }
+        player.knockback(bullet);
+        bullet.destroy();
+    }
     disableScreen() {
         if (Phaser.Input.Keyboard.JustDown(keyO)) {
             //console.log(this); 

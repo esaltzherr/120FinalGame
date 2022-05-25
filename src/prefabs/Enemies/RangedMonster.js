@@ -17,6 +17,7 @@ class RangedMonster extends TemplateMonster {
         this.coolDownInterval = 450;
         this.coolDownTime = 180;
         this.coolingDown = false;
+        this.bulletDamage = 10;
 
         this.anims.create({
             key: 'slime_move',
@@ -49,6 +50,7 @@ class RangedMonster extends TemplateMonster {
                 let bullet = new Bullet(this.scene, this.x, this.y, 'bullet');
                 bullet.rotation = Math.atan2(playerY - this.y, playerX - this.x);
                 bullet.speed = 300;
+                bullet.damage = this.bulletDamage;
                 this.scene.monsterBullets.add(bullet);
                 this.scene.physics.moveTo(bullet, playerX, playerY, bullet.speed);
             }
