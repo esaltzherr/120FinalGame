@@ -13,15 +13,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.setSize(this.width - 10, this.height - 10);
         this.setOffset(this.width / 5 + 10, this.height / 2 + 10);
 
-        this.fireMaxCooldown = 50;
-        this.fireCooldown = this.fireMaxCooldown;
 
-        this.gun = new Gun(this.scene, this.x, this.y + 50, 'player_gun', this).setOrigin(0.5, 0.25);
-        this.knife = new Knife(this.scene, this.x, this.y, 'NOTHING', this);
-
+        
         // Facing for animations and dashing
         this.facing = 'South';
         this.walkingDirection = 'South';
+        this.moveDirection = '';
         this.moving = false;
         this.standingStill = true;
 
@@ -48,7 +45,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.dashTimer = this.maxDashTimer;
 
         this.canShoot = true;
-        this.shootCoolDown;
+        this.defaultShootCooldown = 50;
+        this.shootCoolDown = this.defaultShootCooldown;
+        this.defaultBulletDamage = 50;
+        this.bulletDamage = this.defaultBulletDamage;
 
         this.canHeal = true;
         this.healing = false;
@@ -61,6 +61,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.stabbing = false;
         this.stabCooldown;
         this.stabRadius;
+
+        this.gun = new Gun(this.scene, this.x, this.y + 50, 'player_gun', this).setOrigin(0.5, 0.25);
+        this.knife = new Knife(this.scene, this.x, this.y, 'NOTHING', this);
+
 
         // animations
         this.anims.create({

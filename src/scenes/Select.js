@@ -11,7 +11,7 @@ class Select extends Phaser.Scene {
         //    this.nextWave = data;
         //});
 
-        var abilities = ["Walking", "Shooting", "Dashing", "Stabing", "Healing"];
+        var abilities = ["Walking ", "Shooting", "Dashing", "Stabing", "Healing"];
 
         this.ability1 = abilities.splice(Phaser.Math.Between(0, abilities.length-1),1);
         this.ability2 = abilities.splice(Phaser.Math.Between(0, abilities.length-1),1);
