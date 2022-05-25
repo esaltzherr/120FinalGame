@@ -45,7 +45,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.dashTimer = this.maxDashTimer;
 
         this.canShoot = true;
-        this.defaultShootCooldown = 100;
+        this.defaultShootCooldown = 50;
         this.shootCoolDown = this.defaultShootCooldown;
         this.defaultBulletDamage = 50;
         this.bulletDamage = this.defaultBulletDamage;

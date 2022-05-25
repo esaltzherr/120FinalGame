@@ -48,10 +48,10 @@ class Play extends Phaser.Scene {
         this.events.on('resume', (scene, data) => {
             switch (data.upgrade[0]) {
                 case 'Shooting':
-                    this.player.shootCooldown = 1;
-                    console.log(this.player.shootCoolDown);
+                    this.player.shootCoolDown /= 1.5;
+                    console.log("ShootCD: " + this.player.shootCooldown);
                     this.player.bulletDamage *= 1.5;
-                    this.player.gun.updateUpgrades();
+                    this.player.gun.updateUpgrades(this.player.shootCoolDown, this.player.bulletDamage);
                     break;
                 case 'Healing':
                     this.player.healAmount *= 1.5;
@@ -208,7 +208,7 @@ class Play extends Phaser.Scene {
                 this.monsters.add(new monster(this, randX, randY).setOrigin(0.5, 0.5));
 
                 // check if done spawning
-                if (spawnTimer.getRepeatCount() == num - 1) {
+                if (spawnTimer.getRepeatCount() == 0) {
                     this.spawning = false;
                 }
             },
