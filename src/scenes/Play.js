@@ -79,6 +79,7 @@ class Play extends Phaser.Scene {
                     break;
                 case 'Walking':
                     this.player.canWalk = false;
+                    console.log(this.player.canWalk);
                     break;
                 case 'Dashing':
                     this.player.canDash = false;
