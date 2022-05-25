@@ -13,19 +13,16 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.setSize(this.width - 10, this.height - 10);
         this.setOffset(this.width / 5 + 10, this.height / 2 + 10);
 
-        this.fireMaxCooldown = 50;
-        this.fireCooldown = this.fireMaxCooldown;
 
-        this.gun = new Gun(this.scene, this.x, this.y + 50, 'player_gun', this).setOrigin(0.5, 0.25);
-        this.knife = new Knife(this.scene, this.x, this.y, 'NOTHING', this);
-
+        
         // Facing for animations and dashing
         this.facing = 'South';
         this.walkingDirection = 'South';
+        this.moveDirection = '';
         this.moving = false;
         this.standingStill = true;
 
-
+        this.canTakeDamage = true;
         this.knockedBack = false;
         this.knockBackMaxTime = 50;
         this.knockBackTime = this.knockBackMaxTime;
@@ -48,19 +45,26 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.dashTimer = this.maxDashTimer;
 
         this.canShoot = true;
-        this.shootCoolDown;
+        this.defaultShootCooldown = 50;
+        this.shootCoolDown = this.defaultShootCooldown;
+        this.defaultBulletDamage = 50;
+        this.bulletDamage = this.defaultBulletDamage;
 
         this.canHeal = true;
         this.healing = false;
         this.maxHealth = 100;
         this.health = this.maxHealth;
-        this.defaultHealAmount = 1;
+        this.defaultHealAmount = .1;
         this.healAmount = this.defaultHealAmount;
 
         this.canStab = true;
         this.stabbing = false;
         this.stabCooldown;
         this.stabRadius;
+
+        this.gun = new Gun(this.scene, this.x, this.y + 50, 'player_gun', this).setOrigin(0.5, 0.25);
+        this.knife = new Knife(this.scene, this.x, this.y, 'NOTHING', this);
+
 
         // animations
         this.anims.create({
@@ -206,6 +210,16 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         if (this.canHeal) {
             if (keySHIFT.isDown && !this.dashing && !this.stabbing) {
                 console.log("Heal");
+                if(this.health < this.maxHealth){
+                    if(this.health + this.healAmount < this.maxHealth){
+                        this.health += this.healAmount;
+                    }
+                    else{
+                        this.health = this.maxHealth;
+                    }
+                    
+                }
+                
                 this.healing = true;
             }
             else {
@@ -263,15 +277,17 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.dashTimer = this.maxDashTimer;
         }
         if(this.knockedBack){
+            this.canTakeDamage = false;
             this.knockBackTime -= 1;
             if(this.knockBackTime%10 == 0){
-                this.setTan
+                // this.setTan ????? IDK WHAT THIS WAS
                 this.flicker();
             }
         }
         if(this.knockBackTime < 0){
             this.alpha = 1;
             this.knockedBack = false;
+            this.canTakeDamage = true;
             this.knockBackTime = this.knockBackMaxTime;
         }
 
