@@ -30,6 +30,9 @@ class Play extends Phaser.Scene {
         this.load.image('healer_body', './assets/healer_body.png');
         this.load.image('healer_eye', './assets/healer_eye.png');
 
+        // other sprites
+        this.load.image('floor_1', './assets/floor_1.png');
+
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
         keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
@@ -43,8 +46,7 @@ class Play extends Phaser.Scene {
     }
 
     create() {
-        // world bounds
-
+        // ability enable/disable
         this.events.on('resume', (scene, data) => {
             console.log(data);
             switch (data.upgrade[0]) {
@@ -77,18 +79,45 @@ class Play extends Phaser.Scene {
                     this.player.canStab = false;
                     break;
             }
-
-
         });
 
+        // world bounds
         this.boundWidth = this.game.config.width * 2.5;
         this.boundHeight = this.game.config.height * 2.5;
         this.physics.world.setBounds(0, 0, this.boundWidth, this.boundHeight);
         this.physics.world.setBoundsCollision(true, true, true, true);
 
+        // ground
+        for (let i = -240; i < this.boundWidth; i += 960) {
+            for (let j = -135; j < this.boundHeight; j += 540) {
+                this.add.sprite(i, j, 'floor_1').setOrigin(0, 0);
+            }
+        }
+
         // show world bounds
-        var r3 = this.add.rectangle(0, 0, this.boundWidth, this.boundHeight).setOrigin(0, 0);
-        r3.setStrokeStyle(3, 0x1a65ac);
+        this.boundsLeft = this.add.rectangle(0, 0, 50, this.boundHeight).setOrigin(1, 0);
+        this.boundsTop = this.add.rectangle(0, 0, this.boundWidth, 50).setOrigin(0, 1);
+        this.boundsRight = this.add.rectangle(this.boundWidth, 0, 50, this.boundHeight).setOrigin(0,0);
+        this.boundsBottom = this.add.rectangle(0, this.boundHeight, this.boundWidth, 50).setOrigin(0, 0);
+        this.boundsLeft.setStrokeStyle(3, 0x1a65ac);
+        this.boundsTop.setStrokeStyle(3, 0x1a65ac);
+        this.boundsRight.setStrokeStyle(3, 0x1a65ac);
+        this.boundsBottom.setStrokeStyle(3, 0x1a65ac);
+
+        // world bound physics (because for some reason, bullets don't wanna collide with actual bounds)
+        this.physics.add.existing(this.boundsLeft)
+        this.physics.add.existing(this.boundsTop)
+        this.physics.add.existing(this.boundsRight)
+        this.physics.add.existing(this.boundsBottom)
+
+        this.boundsGroup = this.physics.add.group();
+        this.boundsGroup.add(this.boundsLeft);
+        this.boundsGroup.add(this.boundsTop);
+        this.boundsGroup.add(this.boundsRight);
+        this.boundsGroup.add(this.boundsBottom);
+        this.boundsGroup.getChildren().forEach(element => {
+            element.body.pushable = false;
+        });
 
         // extras
         var r1 = this.add.rectangle(200, 200, 148, 148, 0x6666ff);
@@ -107,6 +136,7 @@ class Play extends Phaser.Scene {
         this.spawnMonsters(this.numMonsters, [BasicMonster]);
         this.spawning = true;
         this.waveNumber = 1;
+        this.monstersChosen;
 
         // player setup 
         this.player = new Player(this, 200, 200, 'dudeDown');
@@ -124,9 +154,14 @@ class Play extends Phaser.Scene {
         });
         this.physics.add.collider(this.monsters, this.bullets, this.hurtMonster);
         this.physics.add.collider(this.player.knife, this.monsters, (knife, monster) => { monster.destroy(); });
+        //this.physics.add.collider(this.monsters, this.player.knife, this.stabMonster);
 
         this.physics.add.collider(this.monsters, this.bullets, this.destroy);
         this.physics.add.collider(this.player.knife, this.monsters, this.killMonster);
+
+        this.physics.add.collider(this.boundsGroup, this.bullets, (bounds, bullet) => { bullet.destroy(); });
+        this.physics.add.collider(this.boundsGroup, this.monsterBullets, (bounds, bullet) => { bullet.destroy(); });
+        this.physics.add.collider(this.boundsGroup, this.monsters);
 
         // FOR DEBUG ONLY: CLEAR WAVE
         keyL.on("down", (key, event) => {
@@ -146,14 +181,14 @@ class Play extends Phaser.Scene {
             this.spawning = true;
             this.numMonsters += 5;
             this.scene.manager.getScene('hud').updateWaveCounter(++this.waveNumber);
-            let monstersChosen = this.pickMonsters();
+            this.monstersChosen = this.pickMonsters();
 
             this.resetPlayer();
-            this.scene.launch('selectscene', monstersChosen);
+            this.scene.launch('selectscene', this.monstersChosen);
             this.scene.pause();
             //console.log(monstersChosen);
 
-            this.spawnMonsters(this.numMonsters, monstersChosen);
+            this.spawnMonsters(this.numMonsters, this.monstersChosen);
         }
     }
 
@@ -162,6 +197,12 @@ class Play extends Phaser.Scene {
         monster.health -= bullet.damage;
         bullet.destroy();
         if (monster.health <= 0) { monster.destroy(); }
+    }
+
+    stabMonster(knife, monster) {
+        monster.health -= knife.damage;
+        if (monster.health <= 0) { monster.destroy(); }
+        //else { monster.knockback(knife); }
     }
 
     gotHit(player, monster) {
@@ -192,7 +233,7 @@ class Play extends Phaser.Scene {
                     var outsideBounds = randX < 72 || randX > this.boundWidth - 120 || randY < 120 || randY > this.boundHeight - 120;
                     var insidePlayerRad = Phaser.Math.Distance.Between(this.player.x, this.player.y, randX, randY) < 200;
                     var overlapping = this.monsters.getChildren().filter(enemy => randX >= enemy.x - 120 && randX <= enemy.x + 120 &&
-                        randY >= enemy.y - 120 && randY <= enemy.y + 120);
+                                                                         randY >= enemy.y - 120 && randY <= enemy.y + 120);
                 } while (outsideBounds || insidePlayerRad || overlapping.length > 0);
 
                 // spawn monsters from monsterArr at random
@@ -200,7 +241,7 @@ class Play extends Phaser.Scene {
                 this.monsters.add(new monster(this, randX, randY).setOrigin(0.5, 0.5));
 
                 // check if done spawning
-                if (spawnTimer.getRepeatCount() == num - 1) {
+                if (spawnTimer.getRepeatCount() == 0) {
                     this.spawning = false;
                 }
             },

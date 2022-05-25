@@ -22,6 +22,7 @@ class TemplateMonster extends Phaser.Physics.Arcade.Sprite {
         this.health = this.maxHealth;
         this.meleeDamage = config.meleeDamage;
         this.isTower = config.isTower
+        this.beingKnifed = false
 
         // size settings
         this.setSize(config.sizeX, config.sizeY);
@@ -32,7 +33,7 @@ class TemplateMonster extends Phaser.Physics.Arcade.Sprite {
     }
 
     update() {
-        this.scene.physics.moveTo(this, this.scene.player.x, this.scene.player.y, this.speed);
+        if(!this.beingKnifed) { this.scene.physics.moveTo(this, this.scene.player.x, this.scene.player.y, this.speed); }
         if(this.scene.player.x < this.x) { this.flipX = true; }
         else { this.flipX = false; }
     }
@@ -44,5 +45,17 @@ class TemplateMonster extends Phaser.Physics.Arcade.Sprite {
             //console.log('healed');
             //console.log(this.health);
         }
+    }
+
+    knockback(player){
+        // KNOCKBACK DOESN'T RESPECT ANGLE
+
+        this.beingKnifed = true;
+        let angle = Phaser.Math.Angle.Between(this.x, this.y, player.x, player.y);
+        let horizontal =  Math.cos(angle);
+        let verticle = Math.sin(angle);
+
+        this.setVelocity(-this.velocityX + this.x, -this.velocityY + this.y)
+        //this.beingKnifed = false
     }
 }
