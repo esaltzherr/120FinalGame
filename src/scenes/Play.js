@@ -48,23 +48,31 @@ class Play extends Phaser.Scene {
     create() {
         // ability enable/disable
         this.events.on('resume', (scene, data) => {
-            console.log(data);
             switch (data.upgrade[0]) {
                 case 'Shooting':
+                    this.player.shootCoolDown /= 1.5;
+                    console.log("ShootCD: " + this.player.shootCooldown);
+                    this.player.bulletDamage *= 1.5;
+                    this.player.gun.updateUpgrades(this.player.shootCoolDown, this.player.bulletDamage);
                     break;
                 case 'Healing':
+                    this.player.healAmount *= 1.5;
                     break;
                 case 'Walking':
+                    this.player.moveSpeed *= 1.5;
                     break;
                 case 'Dashing':
+                    this.player.dashSpeed *= 1.5;
+                    this.player.maxDashCooldown /= 1.5;
                     break;
                 case 'Stabbing':
+
                     break;
             }
             switch(data.disable[0]){
                 case 'Shooting':
-                    console.log("SHOOT\n");
-                    this.player.canShoot = false;   
+                    this.player.canShoot = false;  
+                    this.player.gun.updateUpgrades(); 
                     break;
                 case 'Healing':
                     this.player.canHeal = false;
@@ -206,7 +214,10 @@ class Play extends Phaser.Scene {
     }
 
     gotHit(player, monster) {
-        //player.health -= monster.meleeDamage;
+        if(player.canTakeDamage){
+            player.health -= monster.meleeDamage;
+        }
+            
         player.knockback(monster);
     }
 
@@ -264,18 +275,26 @@ class Play extends Phaser.Scene {
         else { return -1; }
     }
     resetPlayer(){
+        this.player.moveSpeed = this.player.defaultMoveSpeed;
+
         this.player.canDash = true;
-        this.player.maxDashCooldown = this.player.defaultDashCooldown
+        this.player.maxDashCooldown = this.player.defaultDashCooldown;
+        this.player.dashSpeed = this.player.defaultDashSpeed;
+
 
         this.player.canWalk = true;
         this.player.moveSpeed = this.player.defaultMoveSpeed;
 
-        this.player.canShoot = true;
 
         this.player.canHeal = true;
         this.player.healAmount = this.player.defaultHealAmount;
 
         this.player.canStab = true;
 
+        this.player.canShoot = true;
+        this.player.bulletDamage = this.player.defaultBulletDamage;
+        this.player.shootCoolDown = this.player.defaultShootCooldown;
+        this.player.gun.updateUpgrades();
+        
     }
 }
