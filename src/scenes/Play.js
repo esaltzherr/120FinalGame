@@ -231,7 +231,6 @@ class Play extends Phaser.Scene {
             player.health -= bullet.damage;
         }
         player.knockback(bullet);
-        bullet.destroy();
     }
     disableScreen() {
         if (Phaser.Input.Keyboard.JustDown(keyO)) {
