@@ -55,7 +55,7 @@ class Play extends Phaser.Scene {
                 case 'Shooting':
                     this.player.shootCoolDown /= 1.5;
                     console.log("ShootCD: " + this.player.shootCooldown);
-                    this.player.bulletDamage *= 1.5;
+                    this.player.bulletDamage *= 2;
                     this.player.gun.updateUpgrades(this.player.shootCoolDown, this.player.bulletDamage);
                     break;
                 case 'Healing':
