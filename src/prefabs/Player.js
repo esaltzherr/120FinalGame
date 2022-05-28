@@ -29,19 +29,19 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.knockBackSpeed = 300;
         //ability bools
         this.canWalk = true;
-        this.defaultMoveSpeed = 100;
+        this.defaultMoveSpeed = 200;
         this.moveSpeed = this.defaultMoveSpeed;
         // this can also be used as a "Currently Using Ability"
         this.tempDisableMove = false;
 
         this.canDash = true;
         this.dashing = false;
-        this.defaultDashSpeed = 500;
+        this.defaultDashSpeed = 700;
         this.dashSpeed = this.defaultDashSpeed;
         this.defaultDashCooldown = 300;
         this.maxDashCooldown = this.defaultDashCooldown;
         this.dashCoolDown = 0;
-        this.maxDashTimer = 50; // 50 is about 100 pixels
+        this.maxDashTimer = 30; // 50 is about 100 pixels
         this.dashTimer = this.maxDashTimer;
 
         this.canShoot = true;

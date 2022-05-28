@@ -69,7 +69,7 @@ class Select extends Phaser.Scene {
         }
     }
     selected(upgrade, disable){
-        this.scene.resume('playscene', {upgrade, disable});
+        this.scene.resume('playscene', {upgrade, disable});         
         this.scene.stop();
     }
 }
