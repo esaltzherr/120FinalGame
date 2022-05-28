@@ -15,4 +15,15 @@ class Bullet extends Phaser.Physics.Arcade.Sprite {
     update() {
     }
     
+    destroy() {
+        let explosion = this.scene.add.sprite(this.x, this.y);
+        explosion.anims.create({
+            key: 'bullet_destroy',
+            frames: 'bullet_impact',
+            frameRate: 24,
+        });
+        super.destroy();
+        explosion.anims.play('bullet_destroy');
+        explosion.on("animationcomplete", () => { explosion.destroy(); })
+    }
 }

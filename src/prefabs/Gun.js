@@ -74,8 +74,8 @@ class Gun extends Phaser.Physics.Arcade.Sprite {
 
 
             if (this.scene.input.activePointer.leftButtonDown()) {
-                var bullet = new Bullet(this.scene, this.x, this.y, 'bullet');
-                bullet.angle = this.angle;
+                var bullet = new Bullet(this.scene, this.x, this.y, 'player_bullet');
+                bullet.angle = this.angle + Math.floor(Math.random() * (4 + 4)) - 4;
                 this.scene.bullets.add(bullet);
                 this.scene.physics.moveTo(bullet, this.scene.input.mousePointer.worldX, this.scene.input.mousePointer.worldY, bullet.speed);
                 this.fireCooldown = this.fireMaxCooldown;

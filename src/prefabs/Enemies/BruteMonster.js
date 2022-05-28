@@ -5,7 +5,7 @@ class BruteMonster extends TemplateMonster {
             health: 200,
             meleeDamage: 40,
             sizeX: 120,
-            sizeY: 120,
+            sizeY: 124,
             offsetX: 0,
             offsetY: 0,
             scale: 0.95,
