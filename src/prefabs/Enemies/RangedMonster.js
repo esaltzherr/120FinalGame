@@ -47,7 +47,7 @@ class RangedMonster extends TemplateMonster {
         if(Phaser.Math.Distance.Between(this.x, this.y, playerX, playerY) < 500) {
             // shoot on designated intervals
             if(this.timer % this.fireInterval == 0 && this.timer != 0 && !this.coolingDown) {
-                let bullet = new Bullet(this.scene, this.x, this.y, 'bullet');
+                let bullet = new Bullet(this.scene, this.x, this.y, 'enemy_bullet');
                 bullet.rotation = Math.atan2(playerY - this.y, playerX - this.x);
                 bullet.speed = 300;
                 bullet.damage = this.bulletDamage;
