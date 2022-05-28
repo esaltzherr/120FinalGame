@@ -1,5 +1,5 @@
 class HealerMonster extends TemplateMonster {
-    constructor(scene, x, y, texture = 'tower_body_temp') {
+    constructor(scene, x, y, texture = 'healer_body') {
         super(scene, x, y, texture, {
             speed: 0,
             health: 150,
@@ -8,9 +8,10 @@ class HealerMonster extends TemplateMonster {
             sizeY: 100,
             offsetX: 0,
             offsetY: 0,
-            scale: 1
+            scale: 1,
+            isTower: true
         });
-        this.head = scene.add.sprite(this.x, this.y - 40, 'healer_head_temp').setOrigin(0.5, 0.5);
+        this.head = scene.add.sprite(this.x, this.y - 40, 'healer_eye').setOrigin(0.5, 0.5);
         this.timer = 0;
         this.healInterval = 60;
 

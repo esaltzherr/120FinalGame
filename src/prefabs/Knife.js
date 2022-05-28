@@ -11,6 +11,9 @@ class Knife extends Phaser.Physics.Arcade.Sprite {
         this.setPushable(false);
         this.setScale(1.5);
         this.distance = 10;
+
+        this.damage = 1
+        console.log('knife')
     }
 
     update() {
