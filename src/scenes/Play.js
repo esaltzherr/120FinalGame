@@ -6,7 +6,7 @@ class Play extends Phaser.Scene {
     preload() {
         this.load.image('dudeDown', './assets/DudeFaceDown.png');
         this.load.image('dudeUp', './assets/DudeFaceUp.png');
-        this.load.image('bullet', './assets/bullet.png');
+        //this.load.image('bullet', './assets/bullet.png');
         this.load.image('monster', './assets/monster.png');
         this.load.image('tower_body_temp', './assets/tower_body_temp.png');
         this.load.image('sentry_head_temp', './assets/sentry_head_temp.png');
@@ -21,17 +21,20 @@ class Play extends Phaser.Scene {
         this.load.spritesheet('player_run_right', './assets/player_run_right.png', { frameWidth: 96, frameHeight: 96 });
         this.load.spritesheet('player_run_up_right', './assets/player_run_up_right.png', { frameWidth: 96, frameHeight: 96 });
         this.load.image('player_gun', './assets/player_gun.png');
+        this.load.image('player_bullet', './assets/bullet_1.png');
 
         // enemy sprites
         this.load.spritesheet('slime_enemy', './assets/slime_enemy.png', { frameWidth: 96, frameHeight: 96 });
-        this.load.spritesheet('brute_enemy', './assets/brute_enemy.png', { frameWidth: 120, frameHeight: 120 });
+        this.load.spritesheet('brute_enemy', './assets/brute_enemy.png', { frameWidth: 120, frameHeight: 124 });
         this.load.image('turret_body', './assets/turret_body.png');
         this.load.image('turret_eye', './assets/turret_eye.png');
         this.load.image('healer_body', './assets/healer_body.png');
         this.load.image('healer_eye', './assets/healer_eye.png');
+        this.load.image('enemy_bullet', './assets/enemy_bullet.png');
 
         // other sprites
         this.load.image('floor_1', './assets/floor_1.png');
+        this.load.spritesheet('bullet_impact', './assets/bullet_impact.png', { frameWidth: 32, frameHeight: 32});
 
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         keyA = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A);
@@ -52,7 +55,7 @@ class Play extends Phaser.Scene {
                 case 'Shooting':
                     this.player.shootCoolDown /= 1.5;
                     console.log("ShootCD: " + this.player.shootCooldown);
-                    this.player.bulletDamage *= 1.5;
+                    this.player.bulletDamage *= 2;
                     this.player.gun.updateUpgrades(this.player.shootCoolDown, this.player.bulletDamage);
                     break;
                 case 'Healing':
@@ -228,7 +231,6 @@ class Play extends Phaser.Scene {
             player.health -= bullet.damage;
         }
         player.knockback(bullet);
-        bullet.destroy();
     }
     disableScreen() {
         if (Phaser.Input.Keyboard.JustDown(keyO)) {

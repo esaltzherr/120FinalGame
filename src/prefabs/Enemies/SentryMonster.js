@@ -32,7 +32,7 @@ class SentryMonster extends TemplateMonster {
 
             // shoot on designated intervals
             if(this.timer % this.fireInterval == 0 && this.timer != 0 && !this.coolingDown) {
-                let bullet = new Bullet(this.scene, this.head.x, this.head.y, 'bullet');
+                let bullet = new Bullet(this.scene, this.head.x, this.head.y, 'enemy_bullet');
                 bullet.rotation = this.head.rotation;
                 bullet.speed = 300;
                 bullet.damage = this.bulletDamage;
