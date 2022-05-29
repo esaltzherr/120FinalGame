@@ -24,6 +24,7 @@ class Play extends Phaser.Scene {
         this.load.image('player_bullet', './assets/bullet_1.png');
 
         // enemy sprites
+        this.load.spritesheet('enemy_spawn', './assets/enemy_spawn_effect.png', {frameWidth: 72, frameHeight: 72});
         this.load.spritesheet('slime_enemy', './assets/slime_enemy.png', { frameWidth: 96, frameHeight: 96 });
         this.load.spritesheet('brute_enemy', './assets/brute_enemy.png', { frameWidth: 120, frameHeight: 124 });
         this.load.image('turret_body', './assets/turret_body.png');
