@@ -29,6 +29,15 @@ class TemplateMonster extends Phaser.Physics.Arcade.Sprite {
         this.setOffset(config.offsetX, config.offsetY);
         this.scale = config.scale;
 
+        let spawnEffect = this.scene.add.sprite(this.x, this.y)
+        spawnEffect.anims.create({
+            key: 'spawn_effect',
+            frames: 'enemy_spawn',
+            frameRate: 24
+        });
+        spawnEffect.anims.play('spawn_effect');
+        spawnEffect.on('animationcomplete', () => { spawnEffect.destroy(); });
+
         //console.log(this.x + ', ' + this.y)
     }
 
