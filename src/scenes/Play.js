@@ -20,6 +20,9 @@ class Play extends Phaser.Scene {
         this.load.spritesheet('player_idle_up_right', './assets/player_idle_up_right.png', { frameWidth: 96, frameHeight: 96 });
         this.load.spritesheet('player_run_right', './assets/player_run_right.png', { frameWidth: 96, frameHeight: 96 });
         this.load.spritesheet('player_run_up_right', './assets/player_run_up_right.png', { frameWidth: 96, frameHeight: 96 });
+        
+        this.load.spritesheet('player_knife', './assets/melee_anim.png', { frameWidth: 96, frameHeight: 96 });
+        
         this.load.image('player_gun', './assets/player_gun.png');
         this.load.image('player_bullet', './assets/bullet_1.png');
 
