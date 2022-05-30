@@ -34,8 +34,6 @@ class GameOver extends Phaser.Scene {
         this.add.text(game.config.width * 0.5, game.config.height * 0.4, 'You Lasted ' + waveNum + waveText, menuConfig).setOrigin(0.5, 0.5);
 
         // buttons for restart and menu
-        //this.restartButton = this.add.rectangle(game.config.width * 0.25, game.config.height * 0.6, 200, 100, 0xFFFFFF).setOrigin(0, 0);
-        //this.menuButton = this.add.rectangle(game.config.width * 0.75, game.config.height * 0.6, 200, 100, 0xFFFFFF).setOrigin(1, 0);
         this.restartButton = this.add.sprite(game.config.width * 0.25, game.config.height * 0.6, 'restart_button_temp').setOrigin(0, 0);
         this.menuButton = this.add.sprite(game.config.width * 0.75, game.config.height * 0.6, 'menu_button_temp').setOrigin(1, 0);
 
