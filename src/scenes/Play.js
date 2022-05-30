@@ -173,7 +173,14 @@ class Play extends Phaser.Scene {
         //this.physics.add.collider(this.monsters, this.player.knife, this.stabMonster);
 
         this.physics.add.collider(this.monsters, this.bullets, this.destroy);
+
         //this.physics.add.collider(this.player.knife, this.monsters, this.killMonster);
+
+        this.physics.add.collider(this.bullets, this.monsterBullets, (bullet1, bullet2) => {
+            bullet1.destroy();
+            bullet2.destroy();
+        })
+
 
         this.physics.add.collider(this.boundsGroup, this.bullets, (bounds, bullet) => { bullet.destroy(); });
         this.physics.add.collider(this.boundsGroup, this.monsterBullets, (bounds, bullet) => { bullet.destroy(); });
