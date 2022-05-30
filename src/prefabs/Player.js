@@ -63,7 +63,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.stabRadius;
 
         this.gun = new Gun(this.scene, this.x, this.y + 50, 'player_gun', this).setOrigin(0.5, 0.25);
-        this.knife = new Knife(this.scene, this.x, this.y, 'NOTHING', this);    
+        this.knife = new Knife(this.scene, this.x, this.y, 'NOTHING', this);
+        this.knifeHitbox;
 
 
         // animations
@@ -259,7 +260,38 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 this.knife.visible = true;
                 this.knife.angle = this.gun.angle;
                 this.knife.flipY = this.gun.flipY;
-
+                var angle = this.knife.angle;
+                var dir = '';
+                if (angle >= 0) {
+                    dir += 'South'
+                }
+                else {
+                    dir += 'North'
+                }
+                if (Math.abs(angle) >= 90) {
+                    dir += 'West'
+                }
+                else {
+                    dir += 'East'
+                }
+                switch (dir) {
+                    case 'SouthWest':
+                        this.knifeHitbox = this.scene.add.rectangle(this.x, this.y + this.height/4, 75, 75, 0xff66ff).setOrigin(1, 0);
+                        break;
+                    case 'SouthEast':
+                        this.knifeHitbox = this.scene.add.rectangle(this.x, this.y + this.height/4, 75, 75, 0xff66ff).setOrigin(0, 0);
+                        break;
+                    case 'NorthWest':
+                        this.knifeHitbox = this.scene.add.rectangle(this.x, this.y + this.height/4, 80, 80, 0xff66ff).setOrigin(1, 1);
+                        break;
+                    case 'NorthEast':
+                        this.knifeHitbox = this.scene.add.rectangle(this.x, this.y + this.height/4, 80, 80, 0xff66ff).setOrigin(0, 1);
+                        break;
+                }
+                this.knifeHitbox.setVisible(false);
+                this.scene.physics.add.existing(this.knifeHitbox);
+                this.scene.physics.add.overlap(this.knifeHitbox, this.scene.monsters, (knife, monster) => {monster.destroy(); });
+                //Phaser.Math.RotateTo(this.knifeHitBox, this.x, this.y, angle, this.knife.distanceFromPlayer);
 
                 var angle = Phaser.Math.DegToRad(this.gun.angle);
                 Phaser.Math.RotateTo(this.knife, this.x, this.y, angle, this.knife.distanceFromPlayer);
@@ -269,7 +301,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 // on animation finish stabbing = false
 
             }
-            
+
         }
 
     }
@@ -295,6 +327,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.knockedBack = false;
             this.canTakeDamage = true;
             this.knockBackTime = this.knockBackMaxTime;
+
         }
 
 
@@ -325,5 +358,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.stabbing = false;
         this.knife.body.enable = false;
         this.knife.visible = false;
+        this.knifeHitbox.destroy();
     }
 }
