@@ -46,10 +46,18 @@ class Select extends Phaser.Scene {
 
         this.ability1 = abilities.splice(Phaser.Math.Between(0, abilities.length-1),1);
         this.ability2 = abilities.splice(Phaser.Math.Between(0, abilities.length-1),1);
+        
+
 
         //this.option1 = this.add.rectangle(300, 150, 148, 296, 0x6666ff).setOrigin(0, 0);
         this.option1 = this.add.sprite(300, 150, this.ability1).setOrigin(0, 0);
         //this.add.text(325, 170, 'Upgrade: ' + this.ability1 + "\n\nDisable: " + this.ability2, { font: '"Press Start 2P"' });
+
+  /*
+        this.option1 = this.add.image(300, 150, '').setOrigin(0, 0);
+        this.option1 = this.add.rectangle(300, 150, 148, 296, 0x6666ff).setOrigin(0, 0);
+        this.add.text(325, 170, 'Upgrade: ' + this.ability1 + "\n\nDisable: " + this.ability2, { font: '"Press Start 2P"' });*/
+
 
         //this.option2 = this.add.rectangle(600, 150, 148, 296, 0x6666ff).setOrigin(0, 0);
         this.option2 = this.add.sprite(600, 150, this.ability2).setOrigin(0, 0);
