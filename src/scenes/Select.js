@@ -27,7 +27,7 @@ class Select extends Phaser.Scene {
                     this.add.sprite(game.config.width * 0.5 + offset, game.config.height * 0.15, 'brute_enemy').setOrigin(0.5, 0.5);
                 }
                 else if(chosen[i] == RangedMonster) {
-                    this.add.sprite(game.config.width * 0.5 + offset, game.config.height * 0.15, 'slime_enemy').setOrigin(0.5, 0.5);
+                    this.add.sprite(game.config.width * 0.5 + offset, game.config.height * 0.15, 'ranged_enemy').setOrigin(0.5, 0.5);
                 }
                 else if(chosen[i] == SentryMonster) {
                     this.add.sprite(game.config.width * 0.5 + offset, game.config.height * 0.15, 'turret_body').setOrigin(0.5, 0.5);

@@ -44,7 +44,7 @@ class HealerMonster extends TemplateMonster {
 
     pulseParticles() {
         // pulse particles in cirlce
-        let particleManager = this.scene.add.particles('heal_particle_temp');
+        let particleManager = this.scene.add.particles('heal_particle');
         let dz = new Phaser.Geom.Circle(this.x, this.y, 150);
         let emitter = particleManager.createEmitter({
             x: this.x,

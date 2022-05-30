@@ -30,10 +30,12 @@ class Play extends Phaser.Scene {
         this.load.spritesheet('enemy_spawn', './assets/enemy_spawn_effect.png', {frameWidth: 72, frameHeight: 72});
         this.load.spritesheet('slime_enemy', './assets/slime_enemy.png', { frameWidth: 96, frameHeight: 96 });
         this.load.spritesheet('brute_enemy', './assets/brute_enemy.png', { frameWidth: 120, frameHeight: 124 });
+        this.load.spritesheet('ranged_enemy', './assets/ranged_enemy.png', { frameWidth: 96, frameHeight: 96 });
         this.load.image('turret_body', './assets/turret_body.png');
         this.load.image('turret_eye', './assets/turret_eye.png');
         this.load.image('healer_body', './assets/healer_body.png');
         this.load.image('healer_eye', './assets/healer_eye.png');
+        this.load.image('heal_particle', './assets/heal_particle.png');
         this.load.image('enemy_bullet', './assets/enemy_bullet.png');
 
         // other sprites
