@@ -160,6 +160,7 @@ class Play extends Phaser.Scene {
         this.cameras.main.startFollow(this.player);
         this.bullets = this.physics.add.group();
         this.scene.launch('hud')
+        this.gameOver = false;
 
         // physics setup
         this.physics.add.collider(this.monsters, this.monsters);
@@ -193,27 +194,37 @@ class Play extends Phaser.Scene {
     }
 
     update() {
-        this.disableScreen();
-        this.player.update();
+        if(!this.gameOver) {
+            this.disableScreen();
+            this.player.update();
 
-        // Maybe add a second delay after killing the last monster so that it does actually die. or move this update to the beggining of update
-
-
-        // at end of round, spawn 5 more monsters than last round
-        if (this.monsters.getLength() == 0 && !this.spawning) {
-            this.spawning = true;
-            if(this.numMonsters < 50) { this.numMonsters += 5; }
-            this.scene.manager.getScene('hud').updateWaveCounter(++this.waveNumber);
-            this.monstersChosen = this.pickMonsters();
-
-            this.bullets.clear(1, 1);
-            this.monsterBullets.clear(1, 1);
-            this.resetPlayer();
-            this.scene.launch('selectscene', this.monstersChosen);
-            this.scene.pause();
-            //console.log(monstersChosen);
-
-            this.spawnMonsters(this.numMonsters, this.monstersChosen);
+            if(this.player.health <= 0) {
+                this.gameOver = true;
+            }
+    
+            // Maybe add a second delay after killing the last monster so that it does actually die. or move this update to the beggining of update
+    
+    
+            // at end of round, spawn 5 more monsters than last round
+            if (this.monsters.getLength() == 0 && !this.spawning) {
+                this.spawning = true;
+                if(this.numMonsters < 50) { this.numMonsters += 5; }
+                this.scene.manager.getScene('hud').updateWaveCounter(++this.waveNumber);
+                this.monstersChosen = this.pickMonsters();
+    
+                this.bullets.clear(1, 1);
+                this.monsterBullets.clear(1, 1);
+                this.resetPlayer();
+                this.scene.launch('selectscene', this.monstersChosen);
+                this.scene.pause();
+                //console.log(monstersChosen);
+    
+                this.spawnMonsters(this.numMonsters, this.monstersChosen);
+            }
+        }
+        else {
+            this.scene.stop('hud');
+            this.scene.start('gameover');
         }
     }
 
