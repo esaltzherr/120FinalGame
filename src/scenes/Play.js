@@ -20,16 +20,22 @@ class Play extends Phaser.Scene {
         this.load.spritesheet('player_idle_up_right', './assets/player_idle_up_right.png', { frameWidth: 96, frameHeight: 96 });
         this.load.spritesheet('player_run_right', './assets/player_run_right.png', { frameWidth: 96, frameHeight: 96 });
         this.load.spritesheet('player_run_up_right', './assets/player_run_up_right.png', { frameWidth: 96, frameHeight: 96 });
+        
+        this.load.spritesheet('player_knife', './assets/melee_anim.png', { frameWidth: 96, frameHeight: 96 });
+        
         this.load.image('player_gun', './assets/player_gun.png');
         this.load.image('player_bullet', './assets/bullet_1.png');
 
         // enemy sprites
+        this.load.spritesheet('enemy_spawn', './assets/enemy_spawn_effect.png', {frameWidth: 72, frameHeight: 72});
         this.load.spritesheet('slime_enemy', './assets/slime_enemy.png', { frameWidth: 96, frameHeight: 96 });
         this.load.spritesheet('brute_enemy', './assets/brute_enemy.png', { frameWidth: 120, frameHeight: 124 });
+        this.load.spritesheet('ranged_enemy', './assets/ranged_enemy.png', { frameWidth: 96, frameHeight: 96 });
         this.load.image('turret_body', './assets/turret_body.png');
         this.load.image('turret_eye', './assets/turret_eye.png');
         this.load.image('healer_body', './assets/healer_body.png');
         this.load.image('healer_eye', './assets/healer_eye.png');
+        this.load.image('heal_particle', './assets/heal_particle.png');
         this.load.image('enemy_bullet', './assets/enemy_bullet.png');
 
         // other sprites
@@ -156,6 +162,7 @@ class Play extends Phaser.Scene {
         this.cameras.main.startFollow(this.player);
         this.bullets = this.physics.add.group();
         this.scene.launch('hud')
+        this.gameOver = false;
 
         // physics setup
         this.physics.add.collider(this.monsters, this.monsters);
@@ -165,11 +172,18 @@ class Play extends Phaser.Scene {
             bullet.destroy();
         });
         this.physics.add.collider(this.monsters, this.bullets, this.hurtMonster);
-        this.physics.add.collider(this.player.knife, this.monsters, (knife, monster) => { monster.destroy(); });
+        //this.physics.add.collider(this.player.knife, this.monsters, (knife, monster) => { monster.destroy(); });
         //this.physics.add.collider(this.monsters, this.player.knife, this.stabMonster);
 
         this.physics.add.collider(this.monsters, this.bullets, this.destroy);
-        this.physics.add.collider(this.player.knife, this.monsters, this.killMonster);
+
+        //this.physics.add.collider(this.player.knife, this.monsters, this.killMonster);
+
+        this.physics.add.collider(this.bullets, this.monsterBullets, (bullet1, bullet2) => {
+            bullet1.destroy();
+            bullet2.destroy();
+        })
+
 
         this.physics.add.collider(this.boundsGroup, this.bullets, (bounds, bullet) => { bullet.destroy(); });
         this.physics.add.collider(this.boundsGroup, this.monsterBullets, (bounds, bullet) => { bullet.destroy(); });
@@ -182,27 +196,37 @@ class Play extends Phaser.Scene {
     }
 
     update() {
-        this.disableScreen();
-        this.player.update();
+        if(!this.gameOver) {
+            this.disableScreen();
+            this.player.update();
 
-        // Maybe add a second delay after killing the last monster so that it does actually die. or move this update to the beggining of update
-
-
-        // at end of round, spawn 5 more monsters than last round
-        if (this.monsters.getLength() == 0 && !this.spawning) {
-            this.spawning = true;
-            if(this.numMonsters < 50) { this.numMonsters += 5; }
-            this.scene.manager.getScene('hud').updateWaveCounter(++this.waveNumber);
-            this.monstersChosen = this.pickMonsters();
-
-            this.bullets.clear(1, 1);
-            this.monsterBullets.clear(1, 1);
-            this.resetPlayer();
-            this.scene.launch('selectscene', this.monstersChosen);
-            this.scene.pause();
-            //console.log(monstersChosen);
-
-            this.spawnMonsters(this.numMonsters, this.monstersChosen);
+            if(this.player.health <= 0) {
+                this.gameOver = true;
+            }
+    
+            // Maybe add a second delay after killing the last monster so that it does actually die. or move this update to the beggining of update
+    
+    
+            // at end of round, spawn 5 more monsters than last round
+            if (this.monsters.getLength() == 0 && !this.spawning) {
+                this.spawning = true;
+                if(this.numMonsters < 50) { this.numMonsters += 5; }
+                this.scene.manager.getScene('hud').updateWaveCounter(++this.waveNumber);
+                this.monstersChosen = this.pickMonsters();
+    
+                this.bullets.clear(1, 1);
+                this.monsterBullets.clear(1, 1);
+                this.resetPlayer();
+                this.scene.launch('selectscene', this.monstersChosen);
+                this.scene.pause();
+                //console.log(monstersChosen);
+    
+                this.spawnMonsters(this.numMonsters, this.monstersChosen);
+            }
+        }
+        else {
+            this.scene.stop('hud');
+            this.scene.start('gameover');
         }
     }
 

@@ -3,6 +3,15 @@ class Select extends Phaser.Scene {
         super('selectscene');
     }
 
+    preload() {
+        // card sprites
+        this.load.image('Walking', './assets/running_card.png');
+        this.load.image('Shooting', './assets/shooting_card.png');
+        this.load.image('Dashing', './assets/dashing_card.png');
+        this.load.image('Stabbing', './assets/knifing_card_temp.png');
+        this.load.image('Healing', './assets/healing_card.png');
+    }
+
     create() {
         this.nextWave = [];
 
@@ -18,7 +27,7 @@ class Select extends Phaser.Scene {
                     this.add.sprite(game.config.width * 0.5 + offset, game.config.height * 0.15, 'brute_enemy').setOrigin(0.5, 0.5);
                 }
                 else if(chosen[i] == RangedMonster) {
-                    this.add.sprite(game.config.width * 0.5 + offset, game.config.height * 0.15, 'slime_enemy').setOrigin(0.5, 0.5);
+                    this.add.sprite(game.config.width * 0.5 + offset, game.config.height * 0.15, 'ranged_enemy').setOrigin(0.5, 0.5);
                 }
                 else if(chosen[i] == SentryMonster) {
                     this.add.sprite(game.config.width * 0.5 + offset, game.config.height * 0.15, 'turret_body').setOrigin(0.5, 0.5);
@@ -37,12 +46,22 @@ class Select extends Phaser.Scene {
 
         this.ability1 = abilities.splice(Phaser.Math.Between(0, abilities.length-1),1);
         this.ability2 = abilities.splice(Phaser.Math.Between(0, abilities.length-1),1);
+        
 
+
+        //this.option1 = this.add.rectangle(300, 150, 148, 296, 0x6666ff).setOrigin(0, 0);
+        this.option1 = this.add.sprite(300, 150, this.ability1).setOrigin(0, 0);
+        //this.add.text(325, 170, 'Upgrade: ' + this.ability1 + "\n\nDisable: " + this.ability2, { font: '"Press Start 2P"' });
+
+  /*
+        this.option1 = this.add.image(300, 150, '').setOrigin(0, 0);
         this.option1 = this.add.rectangle(300, 150, 148, 296, 0x6666ff).setOrigin(0, 0);
-        this.add.text(325, 170, 'Upgrade: ' + this.ability1 + "\n\nDisable: " + this.ability2, { font: '"Press Start 2P"' });
+        this.add.text(325, 170, 'Upgrade: ' + this.ability1 + "\n\nDisable: " + this.ability2, { font: '"Press Start 2P"' });*/
 
-        this.option2 = this.add.rectangle(600, 150, 148, 296, 0x6666ff).setOrigin(0, 0);
-        this.add.text(625, 170, 'Upgrade: ' + this.ability2 + "\n\nDisable: " + this.ability1, { font: '"Press Start 2P"' });
+
+        //this.option2 = this.add.rectangle(600, 150, 148, 296, 0x6666ff).setOrigin(0, 0);
+        this.option2 = this.add.sprite(600, 150, this.ability2).setOrigin(0, 0);
+        //this.add.text(625, 170, 'Upgrade: ' + this.ability2 + "\n\nDisable: " + this.ability1, { font: '"Press Start 2P"' });
 
 
         // this.object1 = this.add.image(300, 150, 'dudeDown');

@@ -93,7 +93,6 @@ class Gun extends Phaser.Physics.Arcade.Sprite {
         }
     }
     updateUpgrades(cooldown = this.player.defaultShootCooldown, damage = this.player.defaultBulletDamage){
-        console.log("AHHHH: " + cooldown, damage);
         this.fireMaxCooldown = cooldown;
         this.damage = damage;
        

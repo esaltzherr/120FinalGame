@@ -14,7 +14,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.setOffset(this.width / 5 + 10, this.height / 2 + 10);
 
 
-        
+
         // Facing for animations and dashing
         this.facing = 'South';
         this.walkingDirection = 'South';
@@ -38,7 +38,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.dashing = false;
         this.defaultDashSpeed = 700;
         this.dashSpeed = this.defaultDashSpeed;
-        this.defaultDashCooldown = 300;
+        this.defaultDashCooldown = 200;
         this.maxDashCooldown = this.defaultDashCooldown;
         this.dashCoolDown = 0;
         this.maxDashTimer = 30; // 50 is about 100 pixels
@@ -64,6 +64,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         this.gun = new Gun(this.scene, this.x, this.y + 50, 'player_gun', this).setOrigin(0.5, 0.25);
         this.knife = new Knife(this.scene, this.x, this.y, 'NOTHING', this);
+        this.knifeHitbox;
 
 
         // animations
@@ -91,15 +92,18 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             frameRate: 20,
             repeat: -1
         });
+
+
+
     }
 
     update() {
         this.move();
-        
+
         this.gun.update();
         this.facing = this.gun.facing;
         this.knife.update();
-        
+
         this.abilities();
         this.timers();
         if (this.dashing || this.healing || this.stabbing || this.knockedBack) {
@@ -113,7 +117,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         //console.log(this.x);
     }
     move() {
-        if (!this.dashing && ! this.knockedBack) {
+        if (!this.dashing && !this.knockedBack) {
             this.setVelocity(0, 0);
             this.gun.setVelocity(0, 0);
         }
@@ -165,12 +169,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         if (moveDirection != '' && moveDirection != this.moveDirection) {
             this.moveDirection = moveDirection;
         }
-       
-        if(moveDirection.length > 0){
+
+        if (moveDirection.length > 0) {
             this.standingStill = false;
             //console.log("HJFOKDSHFJKHDSJKFHSKDJHKJ");
         }
-        else{
+        else {
             this.standingStill = true;
         }
 
@@ -184,41 +188,41 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         }
         if (this.facing.includes('North')) {
             // set to Angled Up animation
-            if(this.standingStill){
+            if (this.standingStill || this.tempDisableMove || !this.canWalk) {
                 this.anims.play('player_idle_up', true);
             }
-            else{
+            else {
                 this.anims.play('player_run_up', true);
             }
             this.depth = 3;
         }
         else if (this.facing.includes('South')) {
             // set to Angled Down animationdw
-            if(this.standingStill){
+            if (this.standingStill || this.tempDisableMove || !this.canWalk) {
                 this.anims.play('player_idle_down', true);
             }
-            else{
+            else {
                 this.anims.play('player_run_down', true);
-                
+
             }
             this.depth = 1;
         }
-        
+
 
     }
     abilities() {
         if (this.canHeal) {
             if (keySHIFT.isDown && !this.dashing && !this.stabbing) {
-                if(this.health < this.maxHealth){
-                    if(this.health + this.healAmount < this.maxHealth){
+                if (this.health < this.maxHealth) {
+                    if (this.health + this.healAmount < this.maxHealth) {
                         this.health += this.healAmount;
                     }
-                    else{
+                    else {
                         this.health = this.maxHealth;
                     }
-                    
+
                 }
-                
+
                 this.healing = true;
             }
             else {
@@ -250,21 +254,56 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         //// this gonna change when an animation is added. the else will be replaced with animation finishing.
         if (this.canStab) {
-            if (this.scene.input.activePointer.rightButtonDown() && !this.dashing && !this.healing) {
+            if (this.scene.input.activePointer.rightButtonDown() && !this.dashing && !this.healing && !this.stabbing) {
                 this.stabbing = true;
                 this.knife.body.enable = true;
+                this.knife.visible = true;
+                this.knife.angle = this.gun.angle;
+                this.knife.flipY = this.gun.flipY;
+                var angle = this.knife.angle;
+                var dir = '';
+                if (angle >= 0) {
+                    dir += 'South'
+                }
+                else {
+                    dir += 'North'
+                }
+                if (Math.abs(angle) >= 90) {
+                    dir += 'West'
+                }
+                else {
+                    dir += 'East'
+                }
+                switch (dir) {
+                    case 'SouthWest':
+                        this.knifeHitbox = this.scene.add.rectangle(this.x, this.y + this.height/4, 75, 75, 0xff66ff).setOrigin(1, 0);
+                        break;
+                    case 'SouthEast':
+                        this.knifeHitbox = this.scene.add.rectangle(this.x, this.y + this.height/4, 75, 75, 0xff66ff).setOrigin(0, 0);
+                        break;
+                    case 'NorthWest':
+                        this.knifeHitbox = this.scene.add.rectangle(this.x, this.y + this.height/4, 80, 80, 0xff66ff).setOrigin(1, 1);
+                        break;
+                    case 'NorthEast':
+                        this.knifeHitbox = this.scene.add.rectangle(this.x, this.y + this.height/4, 80, 80, 0xff66ff).setOrigin(0, 1);
+                        break;
+                }
+                this.knifeHitbox.setVisible(false);
+                this.scene.physics.add.existing(this.knifeHitbox);
+                this.scene.physics.add.overlap(this.knifeHitbox, this.scene.monsters, (knife, monster) => {monster.destroy(); });
+                //Phaser.Math.RotateTo(this.knifeHitBox, this.x, this.y, angle, this.knife.distanceFromPlayer);
 
-                
+                var angle = Phaser.Math.DegToRad(this.gun.angle);
+                Phaser.Math.RotateTo(this.knife, this.x, this.y, angle, this.knife.distanceFromPlayer);
                 // play stab animation
+                this.knife.anims.play('stab', true);
+                this.knife.on('animationcomplete', this.knifeComplete)
                 // on animation finish stabbing = false
 
             }
-            else {
-                this.stabbing = false;
-                this.knife.body.enable = false;
-            }
+
         }
-        
+
     }
     timers() {
         this.dashCoolDown -= 1;
@@ -275,19 +314,20 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.dashing = false;
             this.dashTimer = this.maxDashTimer;
         }
-        if(this.knockedBack){
+        if (this.knockedBack) {
             this.canTakeDamage = false;
             this.knockBackTime -= 1;
-            if(this.knockBackTime%10 == 0){
+            if (this.knockBackTime % 10 == 0) {
                 // this.setTan ????? IDK WHAT THIS WAS
                 this.flicker();
             }
         }
-        if(this.knockBackTime < 0){
+        if (this.knockBackTime < 0) {
             this.alpha = 1;
             this.knockedBack = false;
             this.canTakeDamage = true;
             this.knockBackTime = this.knockBackMaxTime;
+
         }
 
 
@@ -297,21 +337,27 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.scene.physics.moveTo(this, horizontal * 100 + this.x, verticle * 100 + this.y, speed);
         this.scene.physics.moveTo(this.gun, horizontal * 100 + this.x, verticle * 100 + this.y, speed);
     }
-    knockback(monster){
+    knockback(monster) {
         this.knockedBack = true;
         let angle = Phaser.Math.Angle.Between(this.x, this.y, monster.x, monster.y);
-        let horizontal =  Math.cos(angle);
+        let horizontal = Math.cos(angle);
         let verticle = Math.sin(angle);
 
-        
-        this.moveEntity(-horizontal,  -verticle, this.knockBackSpeed);
+
+        this.moveEntity(-horizontal, -verticle, this.knockBackSpeed);
     }
-    flicker(){
-        if(this.alpha == 0.5){
+    flicker() {
+        if (this.alpha == 0.5) {
             this.alpha = 1;
         }
-        else if (this.alpha == 1){
+        else if (this.alpha == 1) {
             this.alpha = 0.5
         }
+    }
+    knifeComplete = () => {
+        this.stabbing = false;
+        this.knife.body.enable = false;
+        this.knife.visible = false;
+        this.knifeHitbox.destroy();
     }
 }
