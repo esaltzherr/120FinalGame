@@ -40,6 +40,7 @@ class Play extends Phaser.Scene {
 
         // other sprites
         this.load.image('floor_1', './assets/floor_1.png');
+        this.load.image('wall', './assets/wall.png');
         this.load.spritesheet('bullet_impact', './assets/bullet_impact.png', { frameWidth: 32, frameHeight: 32});
 
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
@@ -100,8 +101,8 @@ class Play extends Phaser.Scene {
         });
 
         // world bounds
-        this.boundWidth = this.game.config.width * 2.5;
-        this.boundHeight = this.game.config.height * 2.5;
+        this.boundWidth = this.game.config.width * 2.5 - 96;
+        this.boundHeight = this.game.config.height * 2.5 - 70;
         this.physics.world.setBounds(0, 0, this.boundWidth, this.boundHeight);
         this.physics.world.setBoundsCollision(true, true, true, true);
 
@@ -117,10 +118,15 @@ class Play extends Phaser.Scene {
         this.boundsTop = this.add.rectangle(0, 0, this.boundWidth, 50).setOrigin(0, 1);
         this.boundsRight = this.add.rectangle(this.boundWidth, 0, 50, this.boundHeight).setOrigin(0,0);
         this.boundsBottom = this.add.rectangle(0, this.boundHeight, this.boundWidth, 50).setOrigin(0, 0);
-        this.boundsLeft.setStrokeStyle(3, 0x1a65ac);
-        this.boundsTop.setStrokeStyle(3, 0x1a65ac);
-        this.boundsRight.setStrokeStyle(3, 0x1a65ac);
-        this.boundsBottom.setStrokeStyle(3, 0x1a65ac);
+
+        // add walls to show world bounds
+        for(let x = -768; x < this.boundWidth + 768; x += 128) {
+            for(let y = -512; y < this.boundHeight + 512; y += 128) {
+                if((x < 0 || x >= this.boundWidth) || (y < 0 || y >= this.boundHeight)) {
+                    this.add.sprite(x, y, 'wall').setOrigin(0, 0);
+                }
+            }
+        }
 
         // world bound physics (because for some reason, bullets don't wanna collide with actual bounds)
         this.physics.add.existing(this.boundsLeft)
@@ -136,10 +142,6 @@ class Play extends Phaser.Scene {
         this.boundsGroup.getChildren().forEach(element => {
             element.body.pushable = false;
         });
-
-        // extras
-        var r1 = this.add.rectangle(200, 200, 148, 148, 0x6666ff);
-        this.add.text(0, 0, "Controls: \nWASD\nSpace - Dash\nShift - Heal\nRightMouseButton - Sword\nLeftMouseButton - Shoot", { font: '"Press Start 2P"' });
 
         // Mouse Control
         this.input.mouse.disableContextMenu();
@@ -184,20 +186,19 @@ class Play extends Phaser.Scene {
             bullet2.destroy();
         })
 
-
         this.physics.add.collider(this.boundsGroup, this.bullets, (bounds, bullet) => { bullet.destroy(); });
         this.physics.add.collider(this.boundsGroup, this.monsterBullets, (bounds, bullet) => { bullet.destroy(); });
         this.physics.add.collider(this.boundsGroup, this.monsters);
-
+/*
         // FOR DEBUG ONLY: CLEAR WAVE
         keyL.on("down", (key, event) => {
             this.monsters.clear(1, 1);
-        });
+        });*/
     }
 
     update() {
         if(!this.gameOver) {
-            this.disableScreen();
+            //this.disableScreen();
             this.player.update();
 
             if(this.player.health <= 0) {
