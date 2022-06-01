@@ -20,6 +20,6 @@ class BasicMonster extends TemplateMonster {
         });
         this.anims.play('slime_move');
 
-        console.log('spawned basic');
+        //console.log('spawned basic');
     }
 }

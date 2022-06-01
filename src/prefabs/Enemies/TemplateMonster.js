@@ -51,8 +51,6 @@ class TemplateMonster extends Phaser.Physics.Arcade.Sprite {
         if(this.health <= this.maxHealth - 50){
             this.health += 50;
             if(this.health > this.maxHealth) { this.health = this.maxHealth; }
-            //console.log('healed');
-            //console.log(this.health);
         }
     }
 
