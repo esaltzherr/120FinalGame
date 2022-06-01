@@ -76,7 +76,9 @@ class Play extends Phaser.Scene {
                     this.player.maxDashCooldown /= 1.5;
                     break;
                 case 'Stabbing':
-
+                    this.player.knife.setScale(1.1);
+                    this.player.knife.setSize(120,120);
+                    this.player.knife.distance = 15;
                     break;
             }
             switch(data.disable[0]){
@@ -113,12 +115,6 @@ class Play extends Phaser.Scene {
             }
         }
 
-        // show world bounds
-        this.boundsLeft = this.add.rectangle(0, 0, 50, this.boundHeight).setOrigin(1, 0);
-        this.boundsTop = this.add.rectangle(0, 0, this.boundWidth, 50).setOrigin(0, 1);
-        this.boundsRight = this.add.rectangle(this.boundWidth, 0, 50, this.boundHeight).setOrigin(0,0);
-        this.boundsBottom = this.add.rectangle(0, this.boundHeight, this.boundWidth, 50).setOrigin(0, 0);
-
         // add walls to show world bounds
         for(let x = -768; x < this.boundWidth + 768; x += 128) {
             for(let y = -512; y < this.boundHeight + 512; y += 128) {
@@ -129,6 +125,11 @@ class Play extends Phaser.Scene {
         }
 
         // world bound physics (because for some reason, bullets don't wanna collide with actual bounds)
+        this.boundsLeft = this.add.rectangle(0, 0, 50, this.boundHeight).setOrigin(1, 0);
+        this.boundsTop = this.add.rectangle(0, 0, this.boundWidth, 50).setOrigin(0, 1);
+        this.boundsRight = this.add.rectangle(this.boundWidth, 0, 50, this.boundHeight).setOrigin(0,0);
+        this.boundsBottom = this.add.rectangle(0, this.boundHeight, this.boundWidth, 50).setOrigin(0, 0);
+
         this.physics.add.existing(this.boundsLeft)
         this.physics.add.existing(this.boundsTop)
         this.physics.add.existing(this.boundsRight)
@@ -197,9 +198,11 @@ class Play extends Phaser.Scene {
     }
 
     update() {
+
         if(!this.gameOver) {
             //this.disableScreen();
             this.player.update();
+
 
             if(this.player.health <= 0) {
                 this.gameOver = true;
@@ -226,6 +229,7 @@ class Play extends Phaser.Scene {
             this.scene.stop('hud');
             this.scene.start('gameover');
         }
+        
     }
 
     hurtMonster(monster, bullet) {
@@ -328,5 +332,11 @@ class Play extends Phaser.Scene {
         this.player.bulletDamage = this.player.defaultBulletDamage;
         this.player.shootCoolDown = this.player.defaultShootCooldown;
         this.player.gun.updateUpgrades();
+
+
+        this.player.knife.setScale(.9);
+        this.player.knife.setSize(100,100);
+        this.player.knife.distance = 10;
+
     }
 }

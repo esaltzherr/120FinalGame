@@ -291,6 +291,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 this.knifeHitbox.setVisible(false);
                 this.scene.physics.add.existing(this.knifeHitbox);
                 this.scene.physics.add.overlap(this.knifeHitbox, this.scene.monsters, (knife, monster) => {monster.destroy(); });
+                this.scene.physics.add.overlap(this.knifeHitbox, this.scene.monsterBullets, (knife, bullet) => {bullet.destroy(); });
                 //Phaser.Math.RotateTo(this.knifeHitBox, this.x, this.y, angle, this.knife.distanceFromPlayer);
 
                 var angle = Phaser.Math.DegToRad(this.gun.angle);
