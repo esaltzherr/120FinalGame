@@ -15,7 +15,7 @@ class HealerMonster extends TemplateMonster {
         this.timer = 0;
         this.healInterval = 60;
 
-        console.log('spawned healer');
+        //console.log('spawned healer');
     }
 
     update() {
