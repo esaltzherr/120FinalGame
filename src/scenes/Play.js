@@ -186,20 +186,19 @@ class Play extends Phaser.Scene {
             bullet2.destroy();
         })
 
-
         this.physics.add.collider(this.boundsGroup, this.bullets, (bounds, bullet) => { bullet.destroy(); });
         this.physics.add.collider(this.boundsGroup, this.monsterBullets, (bounds, bullet) => { bullet.destroy(); });
         this.physics.add.collider(this.boundsGroup, this.monsters);
-
+/*
         // FOR DEBUG ONLY: CLEAR WAVE
         keyL.on("down", (key, event) => {
             this.monsters.clear(1, 1);
-        });
+        });*/
     }
 
     update() {
         if(!this.gameOver) {
-            this.disableScreen();
+            //this.disableScreen();
             this.player.update();
 
             if(this.player.health <= 0) {
