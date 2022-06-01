@@ -76,7 +76,9 @@ class Play extends Phaser.Scene {
                     this.player.maxDashCooldown /= 1.5;
                     break;
                 case 'Stabbing':
-
+                    this.player.knife.setScale(1.1);
+                    this.player.knife.setSize(120,120);
+                    this.player.knife.distance = 15;
                     break;
             }
             switch(data.disable[0]){
@@ -197,9 +199,11 @@ class Play extends Phaser.Scene {
     }
 
     update() {
+
         if(!this.gameOver) {
             //this.disableScreen();
             this.player.update();
+
 
             if(this.player.health <= 0) {
                 this.gameOver = true;
@@ -226,6 +230,7 @@ class Play extends Phaser.Scene {
             this.scene.stop('hud');
             this.scene.start('gameover');
         }
+        
     }
 
     hurtMonster(monster, bullet) {
@@ -328,5 +333,11 @@ class Play extends Phaser.Scene {
         this.player.bulletDamage = this.player.defaultBulletDamage;
         this.player.shootCoolDown = this.player.defaultShootCooldown;
         this.player.gun.updateUpgrades();
+
+
+        this.player.knife.setScale(.9);
+        this.player.knife.setSize(100,100);
+        this.player.knife.distance = 10;
+
     }
 }
