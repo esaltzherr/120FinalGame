@@ -203,10 +203,7 @@ class Play extends Phaser.Scene {
             if(this.player.health <= 0) {
                 this.gameOver = true;
             }
-    
-            // Maybe add a second delay after killing the last monster so that it does actually die. or move this update to the beggining of update
-    
-    
+
             // at end of round, spawn 5 more monsters than last round
             if (this.monsters.getLength() == 0 && !this.spawning) {
                 this.spawning = true;
@@ -330,6 +327,5 @@ class Play extends Phaser.Scene {
         this.player.bulletDamage = this.player.defaultBulletDamage;
         this.player.shootCoolDown = this.player.defaultShootCooldown;
         this.player.gun.updateUpgrades();
-        
     }
 }
