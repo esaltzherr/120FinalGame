@@ -115,12 +115,6 @@ class Play extends Phaser.Scene {
             }
         }
 
-        // show world bounds
-        this.boundsLeft = this.add.rectangle(0, 0, 50, this.boundHeight).setOrigin(1, 0);
-        this.boundsTop = this.add.rectangle(0, 0, this.boundWidth, 50).setOrigin(0, 1);
-        this.boundsRight = this.add.rectangle(this.boundWidth, 0, 50, this.boundHeight).setOrigin(0,0);
-        this.boundsBottom = this.add.rectangle(0, this.boundHeight, this.boundWidth, 50).setOrigin(0, 0);
-
         // add walls to show world bounds
         for(let x = -768; x < this.boundWidth + 768; x += 128) {
             for(let y = -512; y < this.boundHeight + 512; y += 128) {
@@ -131,6 +125,11 @@ class Play extends Phaser.Scene {
         }
 
         // world bound physics (because for some reason, bullets don't wanna collide with actual bounds)
+        this.boundsLeft = this.add.rectangle(0, 0, 50, this.boundHeight).setOrigin(1, 0);
+        this.boundsTop = this.add.rectangle(0, 0, this.boundWidth, 50).setOrigin(0, 1);
+        this.boundsRight = this.add.rectangle(this.boundWidth, 0, 50, this.boundHeight).setOrigin(0,0);
+        this.boundsBottom = this.add.rectangle(0, this.boundHeight, this.boundWidth, 50).setOrigin(0, 0);
+
         this.physics.add.existing(this.boundsLeft)
         this.physics.add.existing(this.boundsTop)
         this.physics.add.existing(this.boundsRight)
