@@ -1,5 +1,5 @@
 class RangedMonster extends TemplateMonster {
-    constructor(scene, x, y, texture = 'slime_enemy') {
+    constructor(scene, x, y, texture = 'ranged_enemy') {
         super(scene, x, y, texture, {
             speed: 80,
             health: 100,
@@ -20,14 +20,14 @@ class RangedMonster extends TemplateMonster {
         this.bulletDamage = 10;
 
         this.anims.create({
-            key: 'slime_move',
-            frames: 'slime_enemy',
+            key: 'ranged_move',
+            frames: 'ranged_enemy',
             frameRate: 4,
             repeat: -1
         });
-        this.anims.play('slime_move');
+        this.anims.play('ranged_move');
 
-        console.log('spawned ranged');
+        //console.log('spawned ranged');
     }
 
     update() {

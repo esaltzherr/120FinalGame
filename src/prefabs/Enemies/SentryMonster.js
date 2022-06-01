@@ -20,7 +20,8 @@ class SentryMonster extends TemplateMonster {
         this.coolDownTime = 180;
         this.coolingDown = false;
         this.bulletDamage = 15;
-        console.log('spawned sentry');
+        
+        //console.log('spawned sentry');
     }
 
     update() {

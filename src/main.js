@@ -9,7 +9,7 @@ let config = {
         debug: false
       }
     },
-    scene: [ Preload, Menu, Play, Select, HUD ]
+    scene: [ Preload, Menu, HowToPlay, Play, Select, HUD, GameOver ]
   }
   
   let game = new Phaser.Game(config);
