@@ -59,7 +59,6 @@ class HUD extends Phaser.Scene {
     }
 
     updateWaveCounter(waveNum) {
-        console.log('updated wave');
         this.waveCounter.text = 'Wave: ' + waveNum;
     }
 }

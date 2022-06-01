@@ -27,7 +27,7 @@ class RangedMonster extends TemplateMonster {
         });
         this.anims.play('ranged_move');
 
-        console.log('spawned ranged');
+        //console.log('spawned ranged');
     }
 
     update() {

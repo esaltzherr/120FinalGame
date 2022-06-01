@@ -15,7 +15,7 @@ class HealerMonster extends TemplateMonster {
         this.timer = 0;
         this.healInterval = 60;
 
-        console.log('spawned healer');
+        //console.log('spawned healer');
     }
 
     update() {
@@ -33,7 +33,7 @@ class HealerMonster extends TemplateMonster {
             for(let i = 0; i < children.length; ++i) {
                 // if a given monster is not a healer and is within 150 pixels, heal them
                 if(!(children[i] instanceof HealerMonster) && 
-                   Phaser.Math.Distance.Between(this.x, this.y, children[i].x, children[i].y) < 150) {
+                   Phaser.Math.Distance.Between(this.x, this.y, children[i].x, children[i].y) < 175) {
                         children[i].heal();
                         this.pulseParticles();                        
                 }
@@ -45,7 +45,7 @@ class HealerMonster extends TemplateMonster {
     pulseParticles() {
         // pulse particles in cirlce
         let particleManager = this.scene.add.particles('heal_particle');
-        let dz = new Phaser.Geom.Circle(this.x, this.y, 150);
+        let dz = new Phaser.Geom.Circle(this.x, this.y, 175);
         let emitter = particleManager.createEmitter({
             x: this.x,
             y: this.y,
