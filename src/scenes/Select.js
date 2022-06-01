@@ -30,10 +30,12 @@ class Select extends Phaser.Scene {
                     this.add.sprite(game.config.width * 0.5 + offset, game.config.height * 0.15, 'ranged_enemy').setOrigin(0.5, 0.5);
                 }
                 else if(chosen[i] == SentryMonster) {
-                    this.add.sprite(game.config.width * 0.5 + offset, game.config.height * 0.15, 'turret_body').setOrigin(0.5, 0.5);
+                    let sentryBody = this.add.sprite(game.config.width * 0.5 + offset, game.config.height * 0.15, 'turret_body').setOrigin(0.5, 0.5);
+                    scene.add.sprite(sentryBody.x, sentryBody.y - 40, 'turret_eye').setOrigin(0.5, 0.5);
                 }
                 else if(chosen[i] == HealerMonster) {
-                    this.add.sprite(game.config.width * 0.5 + offset, game.config.height * 0.15, 'healer_body').setOrigin(0.5, 0.5);
+                    let healerBody = this.add.sprite(game.config.width * 0.5 + offset, game.config.height * 0.15, 'healer_body').setOrigin(0.5, 0.5);
+                    scene.add.sprite(healerBody.x, healerBody.y - 40, 'healer_eye').setOrigin(0.5, 0.5);
                 }
                 else {
                     console.log('how did you even get here???');
