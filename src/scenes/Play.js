@@ -153,7 +153,7 @@ class Play extends Phaser.Scene {
         this.monsterBullets = this.physics.add.group();
         this.monsters = this.physics.add.group();
         this.monsters.runChildUpdate = true;
-        //this.spawnMonsters(this.numMonsters, [BasicMonster]);
+        this.spawnMonsters(this.numMonsters, [BasicMonster]);
         this.spawning = true;
         this.waveNumber = 1;
         this.monstersChosen;
