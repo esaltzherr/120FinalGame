@@ -23,7 +23,7 @@ class Knife extends Phaser.Physics.Arcade.Sprite {
             key: 'stab',
             frames: 'player_knife',
             hideOnComplete: true,
-            frameRate: 10,
+            frameRate: 20,
         });
     }
 
