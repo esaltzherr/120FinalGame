@@ -9,7 +9,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.setPushable(false);
 
         //this.body.collideWorldBounds = true;
-
         this.setSize(this.width - 10, this.height - 10);
         this.setOffset(this.width / 5 + 10, this.height / 2 + 10);
 
@@ -102,8 +101,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         this.gun.update();
         this.facing = this.gun.facing;
-        this.knife.update();
-
+        
         this.abilities();
         this.timers();
         if (this.dashing || this.healing || this.stabbing || this.knockedBack) {
@@ -113,8 +111,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.tempDisableMove = false;
         }
 
-        //console.log(this.x);
-        //console.log(this.x);
     }
     move() {
         if (!this.dashing && !this.knockedBack) {
@@ -144,7 +140,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 this.moveEntity(horizontal, verticle, this.moveSpeed);
                 this.moving = true;
             }
-            // else you are not moving so set to standing animations
             else {
                 this.moving = false;
             }
@@ -172,7 +167,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         if (moveDirection.length > 0) {
             this.standingStill = false;
-            //console.log("HJFOKDSHFJKHDSJKFHSKDJHKJ");
         }
         else {
             this.standingStill = true;
@@ -252,7 +246,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             }
         }
 
-        //// this gonna change when an animation is added. the else will be replaced with animation finishing.
         if (this.canStab) {
             if (this.scene.input.activePointer.rightButtonDown() && !this.dashing && !this.healing && !this.stabbing) {
                 this.stabbing = true;
@@ -292,7 +285,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 this.scene.physics.add.existing(this.knifeHitbox);
                 this.scene.physics.add.overlap(this.knifeHitbox, this.scene.monsters, (knife, monster) => {monster.destroy(); });
                 this.scene.physics.add.overlap(this.knifeHitbox, this.scene.monsterBullets, (knife, bullet) => {bullet.destroy(); });
-                //Phaser.Math.RotateTo(this.knifeHitBox, this.x, this.y, angle, this.knife.distanceFromPlayer);
 
                 var angle = Phaser.Math.DegToRad(this.gun.angle);
                 Phaser.Math.RotateTo(this.knife, this.x, this.y, angle, this.knife.distanceFromPlayer);
@@ -319,7 +311,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.canTakeDamage = false;
             this.knockBackTime -= 1;
             if (this.knockBackTime % 10 == 0) {
-                // this.setTan ????? IDK WHAT THIS WAS
                 this.flicker();
             }
         }

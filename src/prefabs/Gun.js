@@ -60,9 +60,6 @@ class Gun extends Phaser.Physics.Arcade.Sprite {
             this.flipY = false;
             facing += 'East'
         }
-        // if(facing != this.facing){
-        //     console.log(facing);
-        // }
         this.facing = facing;
     }
     fire() {
