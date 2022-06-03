@@ -5,11 +5,11 @@ class Select extends Phaser.Scene {
 
     preload() {
         // card sprites
-        this.load.image('Walking', './assets/running_card.png');
-        this.load.image('Shooting', './assets/shooting_card.png');
-        this.load.image('Dashing', './assets/dashing_card.png');
-        this.load.image('Stabbing', './assets/melee_card.png');
-        this.load.image('Healing', './assets/healing_card.png');
+        this.load.image('Walking', './assets/cards/running_card.png');
+        this.load.image('Shooting', './assets/cards/shooting_card.png');
+        this.load.image('Dashing', './assets/cards/dashing_card.png');
+        this.load.image('Stabbing', './assets/cards/melee_card.png');
+        this.load.image('Healing', './assets/cards/healing_card.png');
     }
 
     create() {

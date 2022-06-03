@@ -4,7 +4,7 @@ class HowToPlay extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('how_to_play', './assets/how_to_play.png');
+        this.load.image('how_to_play', './assets/backgrounds/how_to_play.png');
     }
 
     create() {

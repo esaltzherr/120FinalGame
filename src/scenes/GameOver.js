@@ -4,9 +4,9 @@ class GameOver extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('game_over_screen', './assets/game_over_screen.png');
-        this.load.image('retry_button', './assets/retry_button.png');
-        this.load.image('menu_button', './assets/menu_button.png');
+        this.load.image('game_over_screen', './assets/backgrounds/game_over_screen.png');
+        this.load.image('retry_button', './assets/buttons/retry_button.png');
+        this.load.image('menu_button', './assets/buttons/menu_button.png');
     }
 
     create() {

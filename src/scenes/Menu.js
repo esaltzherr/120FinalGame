@@ -4,10 +4,10 @@ class Menu extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('menu_screen', './assets/menu_screen.png')
-        this.load.image('play_button', './assets/play_button.png');
-        this.load.image('how_to_button', './assets/how_to_button.png');
-        this.load.image('menu_button', './assets/menu_button.png');
+        this.load.image('menu_screen', './assets/backgrounds/menu_screen.png')
+        this.load.image('play_button', './assets/buttons/play_button.png');
+        this.load.image('how_to_button', './assets/buttons/how_to_button.png');
+        this.load.image('menu_button', './assets/buttons/menu_button.png');
     }
 
     create() {
