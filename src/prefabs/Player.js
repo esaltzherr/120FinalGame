@@ -7,12 +7,9 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         // physics settings
         this.setPushable(false);
-
-        //this.body.collideWorldBounds = true;
-        this.setSize(this.width - 10, this.height - 10);
-        this.setOffset(this.width / 5 + 10, this.height / 2 + 10);
-
-
+      
+        this.setSize(54, 54);
+        this.setOffset(64 / 5 + 10, 64 / 2 + 10);
 
         // Facing for animations and dashing
         this.facing = 'South';
@@ -91,9 +88,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             frameRate: 20,
             repeat: -1
         });
-
-
-
     }
 
     update() {
@@ -110,14 +104,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         else {
             this.tempDisableMove = false;
         }
-
     }
+  
     move() {
         if (!this.dashing && !this.knockedBack) {
             this.setVelocity(0, 0);
             this.gun.setVelocity(0, 0);
         }
-
 
         var verticle = 0;
         var horizontal = 0;
@@ -160,6 +153,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         else if (verticle < 0) {
             moveDirection += 'North';
         }
+      
         //update direction if you moved
         if (moveDirection != '' && moveDirection != this.moveDirection) {
             this.moveDirection = moveDirection;
@@ -180,6 +174,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         else if (this.facing.includes('West')) {
             this.flipX = true
         }
+      
         if (this.facing.includes('North')) {
             // set to Angled Up animation
             if (this.standingStill || this.tempDisableMove || !this.canWalk) {
@@ -197,13 +192,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             }
             else {
                 this.anims.play('player_run_down', true);
-
             }
             this.depth = 1;
         }
 
 
     }
+  
     abilities() {
         if (this.canHeal) {
             if (keySHIFT.isDown && !this.dashing && !this.stabbing) {
@@ -214,15 +209,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                     else {
                         this.health = this.maxHealth;
                     }
-
                 }
-
                 this.healing = true;
             }
             else {
                 this.healing = false;
             }
         }
+      
         if (!this.tempDisableMove && this.canDash && this.dashCoolDown < 0) {
             if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
                 this.dashCoolDown = this.maxDashCooldown;
@@ -292,7 +286,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 this.knife.anims.play('stab', true);
                 this.knife.on('animationcomplete', this.knifeComplete)
                 // on animation finish stabbing = false
-
             }
 
         }
@@ -319,25 +312,23 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.knockedBack = false;
             this.canTakeDamage = true;
             this.knockBackTime = this.knockBackMaxTime;
-
         }
-
-
-
     }
+  
     moveEntity(horizontal, verticle, speed) {
         this.scene.physics.moveTo(this, horizontal * 100 + this.x, verticle * 100 + this.y, speed);
         this.scene.physics.moveTo(this.gun, horizontal * 100 + this.x, verticle * 100 + this.y, speed);
     }
+  
     knockback(monster) {
         this.knockedBack = true;
         let angle = Phaser.Math.Angle.Between(this.x, this.y, monster.x, monster.y);
         let horizontal = Math.cos(angle);
         let verticle = Math.sin(angle);
 
-
         this.moveEntity(-horizontal, -verticle, this.knockBackSpeed);
     }
+  
     flicker() {
         if (this.alpha == 0.5) {
             this.alpha = 1;
@@ -346,6 +337,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             this.alpha = 0.5
         }
     }
+  
     knifeComplete = () => {
         this.stabbing = false;
         this.knife.body.enable = false;
