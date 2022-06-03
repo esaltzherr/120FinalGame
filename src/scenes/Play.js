@@ -4,27 +4,15 @@ class Play extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('dudeDown', './assets/DudeFaceDown.png');
-        this.load.image('dudeUp', './assets/DudeFaceUp.png');
-        //this.load.image('bullet', './assets/bullet.png');
-        this.load.image('monster', './assets/monster.png');
-        this.load.image('tower_body_temp', './assets/tower_body_temp.png');
-        this.load.image('sentry_head_temp', './assets/sentry_head_temp.png');
-        this.load.image('healer_head_temp', './assets/healer_head_temp.png');
-        this.load.image('heal_particle_temp', './assets/heal_particle_temp.png');
-        this.load.image('gun', './assets/gun.png');
-        this.load.audio('temp_shoot', './assets/temp_shoot.wav');
-
-        // player sprites
+        // player assets
         this.load.spritesheet('player_idle_right', './assets/player_idle_right.png', { frameWidth: 96, frameHeight: 96 });
         this.load.spritesheet('player_idle_up_right', './assets/player_idle_up_right.png', { frameWidth: 96, frameHeight: 96 });
         this.load.spritesheet('player_run_right', './assets/player_run_right.png', { frameWidth: 96, frameHeight: 96 });
         this.load.spritesheet('player_run_up_right', './assets/player_run_up_right.png', { frameWidth: 96, frameHeight: 96 });
-        
         this.load.spritesheet('player_knife', './assets/melee_anim.png', { frameWidth: 96, frameHeight: 96 });
-        
         this.load.image('player_gun', './assets/player_gun.png');
         this.load.image('player_bullet', './assets/bullet_1.png');
+        this.load.audio('temp_shoot', './assets/temp_shoot.wav');
 
         // enemy sprites
         this.load.spritesheet('enemy_spawn', './assets/enemy_spawn_effect.png', {frameWidth: 72, frameHeight: 72});
@@ -50,9 +38,6 @@ class Play extends Phaser.Scene {
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.input.keyboard.addCapture(Phaser.Input.Keyboard.KeyCodes.SHIFT);
         keySHIFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SHIFT);
-
-        keyO = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.O);
-        keyL = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.L);
     }
 
     create() {
@@ -160,7 +145,7 @@ class Play extends Phaser.Scene {
         this.monstersChosen;
 
         // player setup 
-        this.player = new Player(this, 200, 200, 'dudeDown');
+        this.player = new Player(this, 200, 200, 'player_idle_right');
         this.player.body.setCollideWorldBounds(true);
         this.cameras.main.startFollow(this.player);
         this.bullets = this.physics.add.group();
@@ -175,13 +160,7 @@ class Play extends Phaser.Scene {
             bullet.destroy();
         });
         this.physics.add.collider(this.monsters, this.bullets, this.hurtMonster);
-        //this.physics.add.collider(this.player.knife, this.monsters, (knife, monster) => { monster.destroy(); });
-        //this.physics.add.collider(this.monsters, this.player.knife, this.stabMonster);
-
         this.physics.add.collider(this.monsters, this.bullets, this.destroy);
-
-        //this.physics.add.collider(this.player.knife, this.monsters, this.killMonster);
-
         this.physics.add.collider(this.bullets, this.monsterBullets, (bullet1, bullet2) => {
             bullet1.destroy();
             bullet2.destroy();
@@ -190,19 +169,11 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.boundsGroup, this.bullets, (bounds, bullet) => { bullet.destroy(); });
         this.physics.add.collider(this.boundsGroup, this.monsterBullets, (bounds, bullet) => { bullet.destroy(); });
         this.physics.add.collider(this.boundsGroup, this.monsters);
-/*
-        // FOR DEBUG ONLY: CLEAR WAVE
-        keyL.on("down", (key, event) => {
-            this.monsters.clear(1, 1);
-        });*/
     }
 
     update() {
-
         if(!this.gameOver) {
-            //this.disableScreen();
             this.player.update();
-
 
             if(this.player.health <= 0) {
                 this.gameOver = true;
@@ -210,18 +181,20 @@ class Play extends Phaser.Scene {
 
             // at end of round, spawn 5 more monsters than last round
             if (this.monsters.getLength() == 0 && !this.spawning) {
+                // update wave and choose monsters to spawn next round
                 this.spawning = true;
                 if(this.numMonsters < 50) { this.numMonsters += 5; }
                 this.scene.manager.getScene('hud').updateWaveCounter(++this.waveNumber);
                 this.monstersChosen = this.pickMonsters();
     
+                // reset scene and launch select scene
                 this.bullets.clear(1, 1);
                 this.monsterBullets.clear(1, 1);
                 this.resetPlayer();
                 this.scene.launch('selectscene', this.monstersChosen);
                 this.scene.pause();
-                //console.log(monstersChosen);
     
+                // start spawning next round's monsters
                 this.spawnMonsters(this.numMonsters, this.monstersChosen);
             }
         }
@@ -239,12 +212,6 @@ class Play extends Phaser.Scene {
         if (monster.health <= 0) { monster.destroy(); }
     }
 
-    stabMonster(knife, monster) {
-        monster.health -= knife.damage;
-        if (monster.health <= 0) { monster.destroy(); }
-        //else { monster.knockback(knife); }
-    }
-
     gotHit(player, monster) {
         if(player.canTakeDamage){
             player.health -= monster.meleeDamage;
@@ -252,18 +219,12 @@ class Play extends Phaser.Scene {
             
         player.knockback(monster);
     }
+
     gotShot(player, bullet) {
         if(player.canTakeDamage){
             player.health -= bullet.damage;
         }
         player.knockback(bullet);
-    }
-    disableScreen() {
-        if (Phaser.Input.Keyboard.JustDown(keyO)) {
-            //console.log(this); 
-            this.scene.launch('selectscene');
-            this.scene.pause();
-        }
     }
 
     spawnMonsters(num, monsterArr) {
@@ -306,11 +267,6 @@ class Play extends Phaser.Scene {
         return arr;
     }
 
-    // this may be un needed but I'm not sure yet
-    chooseSign() {
-        if (Math.floor(Math.random() * 2) % 2 == 0) { return 1; }
-        else { return -1; }
-    }
     resetPlayer(){
         this.player.moveSpeed = this.player.defaultMoveSpeed;
 

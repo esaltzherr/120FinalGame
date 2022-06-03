@@ -37,8 +37,6 @@ class TemplateMonster extends Phaser.Physics.Arcade.Sprite {
         });
         spawnEffect.anims.play('spawn_effect');
         spawnEffect.on('animationcomplete', () => { spawnEffect.destroy(); });
-
-        //console.log(this.x + ', ' + this.y)
     }
 
     update() {
@@ -52,17 +50,5 @@ class TemplateMonster extends Phaser.Physics.Arcade.Sprite {
             this.health += 50;
             if(this.health > this.maxHealth) { this.health = this.maxHealth; }
         }
-    }
-
-    knockback(player){
-        // KNOCKBACK DOESN'T RESPECT ANGLE
-
-        this.beingKnifed = true;
-        let angle = Phaser.Math.Angle.Between(this.x, this.y, player.x, player.y);
-        let horizontal =  Math.cos(angle);
-        let verticle = Math.sin(angle);
-
-        this.setVelocity(-this.velocityX + this.x, -this.velocityY + this.y)
-        //this.beingKnifed = false
     }
 }

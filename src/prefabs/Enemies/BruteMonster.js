@@ -19,7 +19,5 @@ class BruteMonster extends TemplateMonster {
             repeat: -1
         });
         this.anims.play('brute_move');
-
-        //console.log('spawned brute');
     }
 }
