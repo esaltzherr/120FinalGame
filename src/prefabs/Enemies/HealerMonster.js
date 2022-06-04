@@ -14,8 +14,6 @@ class HealerMonster extends TemplateMonster {
         this.head = scene.add.sprite(this.x, this.y - 40, 'healer_eye').setOrigin(0.5, 0.5);
         this.timer = 0;
         this.healInterval = 60;
-
-        //console.log('spawned healer');
     }
 
     update() {

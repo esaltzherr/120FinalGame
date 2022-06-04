@@ -5,11 +5,11 @@ class Select extends Phaser.Scene {
 
     preload() {
         // card sprites
-        this.load.image('Walking', './assets/running_card.png');
-        this.load.image('Shooting', './assets/shooting_card.png');
-        this.load.image('Dashing', './assets/dashing_card.png');
-        this.load.image('Stabbing', './assets/melee_card.png');
-        this.load.image('Healing', './assets/healing_card.png');
+        this.load.image('Walking', './assets/cards/running_card.png');
+        this.load.image('Shooting', './assets/cards/shooting_card.png');
+        this.load.image('Dashing', './assets/cards/dashing_card.png');
+        this.load.image('Stabbing', './assets/cards/melee_card.png');
+        this.load.image('Healing', './assets/cards/healing_card.png');
     }
 
     create() {
@@ -44,14 +44,16 @@ class Select extends Phaser.Scene {
             }
          });
 
+         // select two random abilities
         var abilities = ["Walking", "Shooting", "Dashing", "Stabbing", "Healing"];
-
         this.ability1 = abilities.splice(Phaser.Math.Between(0, abilities.length-1),1);
         this.ability2 = abilities.splice(Phaser.Math.Between(0, abilities.length-1),1);
 
+        // display abilities as buttons
         this.option1 = this.add.sprite(300, 150, this.ability1).setOrigin(0, 0);
         this.option2 = this.add.sprite(600, 150, this.ability2).setOrigin(0, 0);
         
+        // make buttons interactive
         this.option1.setInteractive();
         this.option2.setInteractive();
         this.input.on('gameobjectdown', this.onObjectClicked, this);

@@ -26,14 +26,13 @@ class RangedMonster extends TemplateMonster {
             repeat: -1
         });
         this.anims.play('ranged_move');
-
-        //console.log('spawned ranged');
     }
 
     update() {
         let playerX = this.scene.player.x;
         let playerY = this.scene.player.y;
 
+        // move towards player until they are 200 pixels away
         if(Phaser.Math.Distance.Between(this.x, this.y, playerX, this.scene.player.y) > 200) {
             this.scene.physics.accelerateTo(this, playerX, this.scene.player.y, this.speed, this.speed, this.speed);
         }

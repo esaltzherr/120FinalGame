@@ -9,10 +9,10 @@ let config = {
         debug: false
       }
     },
-    scene: [ Preload, Menu, HowToPlay, Play, Select, HUD, GameOver ]
+    scene: [ Menu, HowToPlay, Play, Select, HUD, GameOver ]
   }
   
   let game = new Phaser.Game(config);
   
   // reserve keyboard vars
-  let keyW, keyA, keyS, keyD, keyENTER, keySPACE, keySHIFT, keyO, keyP, keyL;
+  let keyW, keyA, keyS, keyD, keyENTER, keySPACE, keySHIFT;

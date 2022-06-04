@@ -5,13 +5,12 @@ class Gun extends Phaser.Physics.Arcade.Sprite {
         scene.add.existing(this);
         this.scene = scene;
         this.player = player;
+
         // physics settings
         this.setPushable(false);
 
-
         this.fireMaxCooldown = this.player.defaultShootCooldown;
-        this.fireCooldown = this.fireMaxCooldown;
-        
+        this.fireCooldown = this.fireMaxCooldown;    
 
         this.depth = 2;
         this.angle = 0;
@@ -60,9 +59,6 @@ class Gun extends Phaser.Physics.Arcade.Sprite {
             this.flipY = false;
             facing += 'East'
         }
-        // if(facing != this.facing){
-        //     console.log(facing);
-        // }
         this.facing = facing;
     }
     fire() {
