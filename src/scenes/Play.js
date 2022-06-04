@@ -12,9 +12,10 @@ class Play extends Phaser.Scene {
         this.load.spritesheet('player_knife', './assets/player/melee_anim.png', { frameWidth: 96, frameHeight: 96 });
         this.load.image('player_gun', './assets/player/player_gun.png');
         this.load.image('player_bullet', './assets/player/bullet_1.png');
-        this.load.audio('temp_shoot', './assets/audio/temp_shoot.wav');
+        this.load.audio('player_shoot', './assets/audio/shoot_sound_final.mp3');
+        this.load.audio('dash_sound', './assets/audio/dash_sound.mp3');
 
-        // enemy sprites
+        // enemy assets
         this.load.spritesheet('enemy_spawn', './assets/enemies/enemy_spawn_effect.png', {frameWidth: 72, frameHeight: 72});
         this.load.spritesheet('slime_enemy', './assets/enemies/slime_enemy.png', { frameWidth: 96, frameHeight: 96 });
         this.load.spritesheet('brute_enemy', './assets/enemies/brute_enemy.png', { frameWidth: 120, frameHeight: 124 });
@@ -25,6 +26,7 @@ class Play extends Phaser.Scene {
         this.load.image('healer_eye', './assets/enemies/healer_eye.png');
         this.load.image('heal_particle', './assets/enemies/heal_particle.png');
         this.load.image('enemy_bullet', './assets/enemies/enemy_bullet.png');
+        this.load.audio('hit_enemy', './assets/audio/hit_enemy.mp3');
 
         // other sprites
         this.load.image('floor_1', './assets/environment/floor_1.png');
@@ -160,7 +162,7 @@ class Play extends Phaser.Scene {
             this.gotShot(player, bullet);
             bullet.destroy();
         });
-        this.physics.add.collider(this.monsters, this.bullets, this.hurtMonster);
+        this.physics.add.collider(this.monsters, this.bullets, this.hurtMonster, null, this);
         this.physics.add.collider(this.monsters, this.bullets, this.destroy);
         this.physics.add.collider(this.bullets, this.monsterBullets, (bullet1, bullet2) => {
             bullet1.destroy();
@@ -211,6 +213,7 @@ class Play extends Phaser.Scene {
         monster.health -= bullet.damage;
         bullet.destroy();
         if (monster.health <= 0) { monster.destroy(); }
+        this.sound.play('hit_enemy');
     }
 
     gotHit(player, monster) {
