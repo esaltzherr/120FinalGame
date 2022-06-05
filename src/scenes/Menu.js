@@ -8,6 +8,7 @@ class Menu extends Phaser.Scene {
         this.load.image('play_button', './assets/buttons/play_button.png');
         this.load.image('how_to_button', './assets/buttons/how_to_button.png');
         this.load.image('menu_button', './assets/buttons/menu_button.png');
+        this.load.audio('select_sound', './assets/audio/select_sound.mp3');
     }
 
     create() {
@@ -31,5 +32,6 @@ class Menu extends Phaser.Scene {
         else {
             console.log('error')
         }
+        this.sound.play('select_sound');
     }
 }

@@ -5,6 +5,7 @@ class HowToPlay extends Phaser.Scene {
 
     preload() {
         this.load.image('how_to_play', './assets/backgrounds/how_to_play.png');
+        this.load.audio('select_sound', './assets/audio/select_sound.mp3');
     }
 
     create() {
@@ -23,5 +24,6 @@ class HowToPlay extends Phaser.Scene {
         else {
             console.log('error')
         }
+        this.sound.play('select_sound');
     }
 }

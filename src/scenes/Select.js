@@ -10,6 +10,7 @@ class Select extends Phaser.Scene {
         this.load.image('Dashing', './assets/cards/dashing_card.png');
         this.load.image('Stabbing', './assets/cards/melee_card.png');
         this.load.image('Healing', './assets/cards/healing_card.png');
+        this.load.audio('select_sound', './assets/audio/select_sound.mp3');
     }
 
     create() {
@@ -69,6 +70,7 @@ class Select extends Phaser.Scene {
         else{
             console.log("ERROR");
         }
+        this.sound.play('select_sound');
     }
 
     selected(upgrade, disable){

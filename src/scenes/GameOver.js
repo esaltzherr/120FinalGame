@@ -7,6 +7,7 @@ class GameOver extends Phaser.Scene {
         this.load.image('game_over_screen', './assets/backgrounds/game_over_screen.png');
         this.load.image('retry_button', './assets/buttons/retry_button.png');
         this.load.image('menu_button', './assets/buttons/menu_button.png');
+        this.load.audio('select_sound', './assets/audio/select_sound.mp3');
     }
 
     create() {
@@ -32,5 +33,6 @@ class GameOver extends Phaser.Scene {
         else {
             console.log('error')
         }
+        this.sound.play('select_sound');
     }
 }
