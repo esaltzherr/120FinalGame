@@ -237,6 +237,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
                 this.moveEntity(horizontal, verticle, this.dashSpeed);
                 this.dashing = true;
+                this.scene.sound.play('dash_sound');
             }
         }
 
