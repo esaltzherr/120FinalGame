@@ -28,10 +28,11 @@ class Play extends Phaser.Scene {
         this.load.image('enemy_bullet', './assets/enemies/enemy_bullet.png');
         this.load.audio('hit_enemy', './assets/audio/hit_enemy.mp3');
 
-        // other sprites
+        // other assets
         this.load.image('floor_1', './assets/environment/floor_1.png');
         this.load.image('wall', './assets/environment/wall.png');
         this.load.spritesheet('bullet_impact', './assets/player/bullet_impact.png', { frameWidth: 32, frameHeight: 32});
+        this.load.audio('song1', './assets/audio/song1.mp3');
 
         // inputs
         keyW = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
@@ -172,6 +173,11 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.boundsGroup, this.bullets, (bounds, bullet) => { bullet.destroy(); });
         this.physics.add.collider(this.boundsGroup, this.monsterBullets, (bounds, bullet) => { bullet.destroy(); });
         this.physics.add.collider(this.boundsGroup, this.monsters);
+
+        // play music on loop
+        this.music = this.sound.add('song1');
+        this.music.setLoop(true);
+        this.music.play();
     }
 
     update() {
@@ -202,6 +208,7 @@ class Play extends Phaser.Scene {
             }
         }
         else {
+            this.music.stop();
             this.scene.stop('hud');
             this.scene.start('gameover');
         }
