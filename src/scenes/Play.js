@@ -26,12 +26,12 @@ class Play extends Phaser.Scene {
         this.load.image('healer_eye', './assets/enemies/healer_eye.png');
         this.load.image('heal_particle', './assets/enemies/heal_particle.png');
         this.load.image('enemy_bullet', './assets/enemies/enemy_bullet.png');
-        this.load.audio('hit_enemy', './assets/audio/hit_enemy.mp3');
 
         // other assets
         this.load.image('floor_1', './assets/environment/floor_1.png');
         this.load.image('wall', './assets/environment/wall.png');
         this.load.spritesheet('bullet_impact', './assets/player/bullet_impact.png', { frameWidth: 32, frameHeight: 32});
+        this.load.audio('hit', './assets/audio/hit_enemy.mp3');
         this.load.audio('song1', './assets/audio/song1.mp3');
 
         // inputs
@@ -158,7 +158,7 @@ class Play extends Phaser.Scene {
 
         // physics setup
         this.physics.add.collider(this.monsters, this.monsters);
-        this.physics.add.collider(this.player, this.monsters, this.gotHit);
+        this.physics.add.collider(this.player, this.monsters, this.gotHit, null, this);
         this.physics.add.collider(this.player, this.monsterBullets, (player, bullet) => {
             this.gotShot(player, bullet);
             bullet.destroy();
@@ -174,8 +174,9 @@ class Play extends Phaser.Scene {
         this.physics.add.collider(this.boundsGroup, this.monsterBullets, (bounds, bullet) => { bullet.destroy(); });
         this.physics.add.collider(this.boundsGroup, this.monsters);
 
-        // play music on loop
-        this.music = this.sound.add('song1');
+        // music/sounds
+        this.music = this.sound.add('song1', { volume: 0.5 });
+        this.hitSound = this.sound.add('hit', { volume: 5 });
         this.music.setLoop(true);
         this.music.play();
     }
@@ -220,15 +221,15 @@ class Play extends Phaser.Scene {
         monster.health -= bullet.damage;
         bullet.destroy();
         if (monster.health <= 0) { monster.destroy(); }
-        this.sound.play('hit_enemy');
+        this.hitSound.play();
     }
 
     gotHit(player, monster) {
         if(player.canTakeDamage){
             player.health -= monster.meleeDamage;
         }
-            
         player.knockback(monster);
+        this.hitSound.play();
     }
 
     gotShot(player, bullet) {
@@ -236,6 +237,7 @@ class Play extends Phaser.Scene {
             player.health -= bullet.damage;
         }
         player.knockback(bullet);
+        this.hitSound.play();
     }
 
     spawnMonsters(num, monsterArr) {
